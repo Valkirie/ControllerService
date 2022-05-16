@@ -201,14 +201,26 @@ namespace ControllerService.Targets
                                     xinputController.profile.steering_power,
                                     xinputController.profile.steering_deadzone);
 
+                                Vibration maxSteerAngleReachedVibration = InputUtils.MaxSteerAngleReachedVibration(
+                                    xinputController.sensorFusion.DeviceAngle.Y, 
+                                    xinputController.profile.steering_max_angle);
+
+                                physicalController.SetVibration(maxSteerAngleReachedVibration);
+
+                                // TODO apply vibration strength, when and where?
+                                // *xinputController.vibrationStrength
+                                // TODO take existing from game in to account
+
                                 switch (xinputController.profile.umc_output)
                                 {
                                     default:
                                     case Output.RightStick:
                                         RightThumb.X = (short)GamepadThumbX;
+
                                         break;
                                     case Output.LeftStick:
                                         LeftThumb.X = (short)GamepadThumbX;
+
                                         break;
                                 }
                             }
