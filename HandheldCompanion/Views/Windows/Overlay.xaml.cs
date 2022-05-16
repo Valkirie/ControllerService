@@ -3,9 +3,11 @@ using ControllerCommon.Utils;
 using Microsoft.Extensions.Logging;
 using SharpDX.XInput;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Timers;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media.Media3D;
@@ -52,9 +54,27 @@ namespace HandheldCompanion.Views.Windows
         private Point LeftTrackPadPosition;
         private Point RightTrackPadPosition;
 
+        int HapticFeedbackCounterRight;
+        int FrequencyRight;
+        int FrequencyRightPrev;
+        int FrequencyArrayLengthPrev;
+        double SpeedRight;
+        double SpeedRightPrev;
+        double[] SpeedArray = new double[45];
+        int SpeedArrayIndex;
+        Vibration HapticVibration = new Vibration();
+        Timer HapticTimerLeft = new Timer() { Interval = 25 };
+        Timer HapticTimerRight = new Timer() { Interval = 25 };
+
+        Dictionary<TouchTarget, double> prevTrackpadSlidingDistance = new();
+        Dictionary<TouchTarget, double> TrackpadSlidingDistance = new();
+
+        Timer LeftTrackpadSliding = new Timer() { Interval = 100, AutoReset = true };
+        Timer RightTrackpadSliding = new Timer() { Interval = 10, AutoReset = true };
+        Dictionary<TouchTarget, Timer> TrackpadSlidingTimer = new();
+
         private enum TouchTarget
         {
-            SwipeTop = 0,
             TrackpadLeft = 1,
             TrackpadRight = 2
         }
@@ -105,7 +125,134 @@ namespace HandheldCompanion.Views.Windows
             UpdateTimer.Tick += UpdateReport;
             UpdateTimer.Start();
 
+            HapticTimerLeft.Elapsed += HapticTimerLeft_Elapsed;
+            HapticTimerRight.Elapsed += HapticTimerRight_Elapsed;
+
+            TrackpadSlidingTimer[TouchTarget.TrackpadLeft] = LeftTrackpadSliding;
+            TrackpadSlidingTimer[TouchTarget.TrackpadRight] = RightTrackpadSliding;
+
+            LeftTrackpadSliding.Elapsed += LeftTrackpadSliding_Elapsed;
+            RightTrackpadSliding.Elapsed += RightTrackpadSliding_Elapsed;
+
             this.SourceInitialized += Overlay_SourceInitialized;
+        }
+
+        private void RightTrackpadSliding_Elapsed(object? sender, ElapsedEventArgs e)
+        {
+
+            int[] FrequencyArray = new int[] { 0 };
+            float FractionalPosition = 0.0f;
+            FrequencyRight = 0;
+
+            // Calculate speed
+            // this is actually distance since last timer elapse ie a speed
+            // pixels per time (depends on timer), default 10 msec
+            SpeedRight = Math.Abs(TrackpadSlidingDistance[TouchTarget.TrackpadRight] - prevTrackpadSlidingDistance[TouchTarget.TrackpadRight]);
+            SpeedRight *= 100.0; // pixels per second      
+
+            // Add to array, loop index
+            if (SpeedArrayIndex > SpeedArray.Length - 1) { SpeedArrayIndex = 0; }
+            SpeedArray[SpeedArrayIndex] = SpeedRight;
+            SpeedArrayIndex += 1;
+
+            // If we have the start of movement,
+            // burst fill average array with speed value
+            // prevents ramping up
+            // Note, alternatively we can compare with previous average, which means multiple cycles of 0
+            if (SpeedRightPrev == 0 && SpeedRight > 0)
+            {
+                for (int i = 0; i < SpeedArray.Length; i++)
+                {
+                    SpeedArray[i] = SpeedRight;
+                }
+            }
+
+            // Determine average
+            double SpeedAverage = SpeedArray.Average();
+
+            //logger.LogInformation("SpeedAverage: {0}, SpeedRight: {1}, Index {2}, Array: {3}", SpeedAverage, SpeedRight, SpeedArrayIndex, SpeedArray);
+
+            // Todo add something that we don't calculate etc if speed is 0
+
+            if (SpeedAverage > 0) { 
+
+                // Generate frequency array to step through
+                // Range speed to frequency
+                float InSpeedMin = 1;    // pixels / second
+                float InSpeedMax = 600; // pixels / second
+                float OutFrequencyMin = 14; // Amount of array elements for vibration off minimal ie longer silence
+                float OutFrequencyMax = 4; // Amount of array elements for vibration off minimal ie short silence
+                int LengthOfOn = 2; // Amount of array elements for vibration on
+
+                int AmountOfElements = (int)Math.Round((Math.Clamp(SpeedAverage, InSpeedMin, InSpeedMax) - InSpeedMin) * (OutFrequencyMax - OutFrequencyMin) / (InSpeedMax - InSpeedMin) + OutFrequencyMin);
+                FrequencyRight = AmountOfElements; // Todo, cleanup
+
+                // Build array
+                FrequencyArray = new int[LengthOfOn + AmountOfElements];
+                // Fill array
+                for (int i = 0; i < LengthOfOn; i++)
+                {
+                    FrequencyArray[i] = 1;
+                }
+
+                for (int i = LengthOfOn; i < FrequencyArray.Length; i++)
+                {
+                    FrequencyArray[i] = 0;
+                }
+
+                //logger.LogInformation("Speed: {0}, AmountOfElementsFloat {1}, FrequencyArray: {2}", SpeedAverage, AmountOfElements, FrequencyArray);
+
+                // When frequency changes, continue from similar
+                // fractional position in updated frequency array
+                if (FrequencyRight != FrequencyRightPrev) {
+                    // Determine position from previous array info
+                    FractionalPosition = ((float)HapticFeedbackCounterRight + 1.0f) / (float)FrequencyArrayLengthPrev;
+                    // Determine fractional position for current array
+                    HapticFeedbackCounterRight = (int)Math.Round((((float)FrequencyArray.Length * FractionalPosition) - 1.0f));
+                }
+
+            }
+
+            // Start over from start of array if we go beyond currently selected frequency array
+            if (HapticFeedbackCounterRight > FrequencyArray.Length - 1 || HapticFeedbackCounterRight < 0) { HapticFeedbackCounterRight = 0; }
+
+            // Read frequency array
+            if (FrequencyArray[HapticFeedbackCounterRight] == 1) { HapticVibration.RightMotorSpeed = 4000; }
+            else { HapticVibration.RightMotorSpeed = 0; }
+            controllerEx.Controller.SetVibration(HapticVibration);
+
+            //logger.LogInformation("SpeedAverage: {0}, FrequencyRight: {1}, HapticFeedbackCounterRight: {2}, Vibe: {3}, FractionalPosition {4}, FreqArray {5}", SpeedAverage, FrequencyRight, HapticFeedbackCounterRight, FrequencyArray[HapticFeedbackCounterRight], FractionalPosition, FrequencyArray);
+
+            // Increment index counter
+            HapticFeedbackCounterRight += 1;
+            // Store previous for next round
+            prevTrackpadSlidingDistance[TouchTarget.TrackpadRight] = TrackpadSlidingDistance[TouchTarget.TrackpadRight];
+            FrequencyRightPrev = FrequencyRight;
+            FrequencyArrayLengthPrev = FrequencyArray.Length;
+            SpeedRightPrev = SpeedRight;
+        }
+
+        private void LeftTrackpadSliding_Elapsed(object? sender, ElapsedEventArgs e)
+        {
+            double dist = Math.Abs(prevTrackpadSlidingDistance[TouchTarget.TrackpadLeft] - TrackpadSlidingDistance[TouchTarget.TrackpadLeft]);
+
+            if (dist > 10)
+                HapticFeedback(TouchTarget.TrackpadLeft);
+
+            prevTrackpadSlidingDistance[TouchTarget.TrackpadLeft] = TrackpadSlidingDistance[TouchTarget.TrackpadLeft];
+
+        }
+
+        private void HapticTimerRight_Elapsed(object? sender, ElapsedEventArgs e)
+        {
+            //HapticVibration.RightMotorSpeed = 0;
+            //controllerEx.Controller.SetVibration(HapticVibration);
+        }
+
+        private void HapticTimerLeft_Elapsed(object? sender, ElapsedEventArgs e)
+        {
+            HapticVibration.LeftMotorSpeed = 0;
+            controllerEx.Controller.SetVibration(HapticVibration);
         }
 
         public Overlay(ILogger logger, PipeClient pipeClient) : this()
@@ -169,20 +316,31 @@ namespace HandheldCompanion.Views.Windows
             this.RightTrackPadPosition = RightTrackpad.PointToScreen(new Point(0, 0));
         }
 
+        private void HapticFeedback(TouchTarget target)
+        {
+            if (controllerEx is null)
+                return;
+
+            switch (target)
+            {
+                default:
+                case TouchTarget.TrackpadLeft:
+                    //HapticVibration.LeftMotorSpeed = 4000;
+                    HapticTimerLeft.Stop();
+                    HapticTimerLeft.Start();
+                    break;
+                case TouchTarget.TrackpadRight:
+                    //HapticVibration.RightMotorSpeed = 4000;
+                    HapticTimerRight.Stop();
+                    HapticTimerRight.Start();
+                    break;
+            }
+
+            controllerEx.Controller.SetVibration(HapticVibration);
+        }
+
         private void Touchsource_Touch(TouchArgs args, long time)
         {
-            /* handle top screen swipe
-            if (swipe != null && args.Id == swipe.Id)
-            {
-                if (args.Status == CursorEvent.EventType.MOVE)
-                    if (args.LocationY - swipe.LocationY > 40) // hardcoded
-                    {
-                        swipe = null;
-                        UpdateControllerVisibility();
-                    }
-                return;
-            } */
-
             double X = args.LocationX - this.OverlayPosition.X;
             double Y = args.LocationY - this.OverlayPosition.Y;
 
@@ -203,10 +361,6 @@ namespace HandheldCompanion.Views.Windows
                     Button = CursorButton.TouchRight;
                     CurrentPoint = RightTrackPadPosition;
                     break;
-                case TouchTarget.SwipeTop:
-                    if (args.Status == CursorEvent.EventType.DOWN)
-                        swipe = args;
-                    return;
             }
 
             // normalized
@@ -215,6 +369,22 @@ namespace HandheldCompanion.Views.Windows
 
             var normalizedX = (relativeX / LeftTrackpad.ActualWidth) / 2.0d;
             var normalizedY = relativeY / LeftTrackpad.ActualHeight;
+
+            switch (args.Status)
+            {
+                case CursorEvent.EventType.DOWN:
+                    TrackpadSlidingDistance[target] = 0;
+                    prevTrackpadSlidingDistance[target] = 0;
+                    TrackpadSlidingTimer[target].Start();
+                    break;
+                case CursorEvent.EventType.MOVE:
+                    TrackpadSlidingDistance[target] = Math.Sqrt(relativeX * relativeX + relativeY * relativeY);
+                    break;
+                case CursorEvent.EventType.UP:
+                    TrackpadSlidingTimer[target].Stop();
+                    // implement inertia
+                    break;
+            }
 
             switch (target)
             {
@@ -230,7 +400,9 @@ namespace HandheldCompanion.Views.Windows
                             prevLeftTrackPadTime = time;
                         }
                         else if (args.Status == CursorEvent.EventType.UP)
+                        {
                             LeftTrackpad.Opacity -= 0.25;
+                        }
                     }
                     break;
 
@@ -245,7 +417,9 @@ namespace HandheldCompanion.Views.Windows
                             prevRightTrackPadTime = time;
                         }
                         else if (args.Status == CursorEvent.EventType.UP)
+                        {
                             RightTrackpad.Opacity -= 0.25;
+                        }
 
                         normalizedX += 0.5d;
                     }

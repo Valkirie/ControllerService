@@ -115,7 +115,7 @@ namespace HandheldCompanion
                 UserIndex userIndex = (UserIndex)idx;
                 ControllerEx controllerEx = new ControllerEx(userIndex, null, ref devices);
 
-                controllers[controllerEx.baseContainerDeviceInstancePath] = controllerEx;
+                controllers[controllerEx.deviceInstancePath] = controllerEx;
 
                 if (controllerEx.isVirtual)
                     continue;
