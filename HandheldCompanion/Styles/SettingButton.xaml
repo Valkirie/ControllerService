@@ -1,0 +1,34 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:HandheldCompanion.Controls"
+    xmlns:s="clr-namespace:System;assembly=mscorlib">
+    <!--  Icon  -->
+    <s:String x:Key="SettingChevronLinkGlyph">&#xE8A7;</s:String>
+    <s:String x:Key="SettingChevronRightGlyph">&#xE76C;</s:String>
+
+    <!--  Styles  -->
+    <!--  Setting used in a Button  -->
+    <Style x:Key="ButtonContentSettingStyle" TargetType="controls:Setting">
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Padding" Value="0,14" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="RightIcon" Value="{StaticResource SettingChevronRightGlyph}" />
+    </Style>
+
+    <!--  Setting button style  -->
+    <Style
+        x:Key="SettingButtonStyle"
+        BasedOn="{StaticResource DefaultButtonStyle}"
+        TargetType="Button">
+        <Setter Property="Padding" Value="16,0" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
+        <Setter Property="BorderThickness" Value="{DynamicResource CardBorderThickness}" />
+        <Setter Property="Background" Value="{DynamicResource CardBackgroundFillColorDefaultBrush}" />
+    </Style>
+</ResourceDictionary>

@@ -1,5 +1,6 @@
 ﻿using ControllerCommon.Managers;
 using ControllerCommon.Utils;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,22 +19,48 @@ namespace ControllerCommon
             // verifying HidHide is installed
             if (!File.Exists(path))
             {
-                LogManager.LogCritical("HidHide is missing. Please get it from: {0}", "https://github.com/ViGEm/HidHide/releases");
-                throw new InvalidOperationException();
-            }
-
-            process = new Process
-            {
-                StartInfo =
+                OpenFileDialog dialog = new OpenFileDialog();
+                dialog.Multiselect = true;
+                dialog.Title = "Choose HidHideCLI.exe";
+                dialog.Filter = "HidHideCLI|HidHideCLI.exe|*.exe|*.exe";
+                bool? result = dialog.ShowDialog();
+                if (result != null && (bool)result)
                 {
-                    UseShellExecute = false,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    CreateNoWindow = true,
-                    FileName = path,
-                    Verb = "runas"
+                    string file = dialog.FileName;
+                    process = new Process
+                    {
+                        StartInfo =
+                        {
+                            UseShellExecute = false,
+                            RedirectStandardOutput = true,
+                            RedirectStandardError = true,
+                            CreateNoWindow = true,
+                            FileName = file,
+                            Verb = "runas"
+                        }
+                    };
                 }
-            };
+                else
+                {
+                    LogManager.LogCritical("HidHide is missing. Please get it from: {0}", "https://github.com/ViGEm/HidHide/releases");
+                    throw new InvalidOperationException();
+                }
+            }
+            else
+            {
+                process = new Process
+                {
+                    StartInfo =
+                    {
+                        UseShellExecute = false,
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true,
+                        CreateNoWindow = true,
+                        FileName = path,
+                        Verb = "runas"
+                    }
+                };
+            }
         }
 
         public List<string> GetRegisteredApplications()

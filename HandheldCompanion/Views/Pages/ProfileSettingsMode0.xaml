@@ -1,197 +1,252 @@
-<Page x:Class="HandheldCompanion.Views.Pages.ProfileSettingsMode0"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:local="clr-namespace:HandheldCompanion" 
-      xmlns:pages="clr-namespace:HandheldCompanion.Views.Pages"
-      xmlns:resx="clr-namespace:HandheldCompanion.Properties"
-      xmlns:ui="http://schemas.modernwpf.com/2019"
-      mc:Ignorable="d" 
-      d:DesignHeight="1000" d:DesignWidth="1000"
-      Title="{x:Static resx:Resources.ProfileSettingsMode0_AdditionalSettings}"
-      Loaded="Page_Loaded">
+<Page
+    x:Class="HandheldCompanion.Views.Pages.ProfileSettingsMode0"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:HandheldCompanion.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:HandheldCompanion"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:pages="clr-namespace:HandheldCompanion.Views.Pages"
+    xmlns:resx="clr-namespace:HandheldCompanion.Properties"
+    xmlns:s="clr-namespace:System;assembly=mscorlib"
+    xmlns:ui="http://schemas.modernwpf.com/2019"
+    Title="{x:Static resx:Resources.ProfileSettingsMode0_AdditionalSettings}"
+    d:DesignHeight="1000"
+    d:DesignWidth="1000"
+    Loaded="Page_Loaded"
+    mc:Ignorable="d">
 
-    <Grid Name="MainGrid" Margin="20">
-        <ui:SimpleStackPanel Spacing="12">
-            
-            <!-- Joystick camera options -->
-            <ui:SimpleStackPanel Spacing="6">
-                <Label Content="{x:Static resx:Resources.ProfileSettingsMode0_CameraOptions}" FontWeight="SemiBold"></Label>
+    <Grid Name="MainGrid" Margin="56,20,12,36">
+        <StackPanel>
 
-                <!-- Sensivity -->
-                <Border                      
-                        Padding="15,12,12,12"
-                        CornerRadius="{DynamicResource ControlCornerRadius}"
-                        Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}">
+            <!--  Joystick camera options  -->
+            <controls:SettingsGroup Margin="0,-32,0,0" Header="{x:Static resx:Resources.ProfileSettingsMode0_CameraOptions}">
 
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="5*" MinWidth="200"></ColumnDefinition>
-                            <ColumnDefinition Width="3*" MinWidth="120"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-
-                        <DockPanel>
-                            <ui:FontIcon FontFamily="{DynamicResource SymbolThemeFontFamily}" Glyph="&#xECE7;" Height="40" HorizontalAlignment="Center"/>
-
-                            <ui:SimpleStackPanel VerticalAlignment="Center" Margin="12,0,0,0">
-                                <TextBlock Text="{x:Static resx:Resources.ProfileSettingsMode0_Sensivity}" FontSize="14"/>
-                                <TextBlock Text="{x:Static resx:Resources.ProfileSettingsMode0_SensivityDesc}" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" FontSize="12" TextWrapping="Wrap"/>
-                            </ui:SimpleStackPanel>
+                <!--  Sensivity  -->
+                <controls:Setting
+                    Description="{x:Static resx:Resources.ProfileSettingsMode0_SensivityDesc}"
+                    Header="{x:Static resx:Resources.ProfileSettingsMode0_Sensivity}"
+                    Icon="&#xECE7;">
+                    <controls:Setting.Resources>
+                        <GridLength x:Key="SettingHeaderControlWidth">5*</GridLength>
+                        <GridLength x:Key="SettingActionControlWidth">3*</GridLength>
+                        <s:Double x:Key="SettingHeaderControlMinWidth">200</s:Double>
+                    </controls:Setting.Resources>
+                    <controls:Setting.ActionContent>
+                        <DockPanel MinWidth="120" Margin="12,0,0,0">
+                            <TextBlock
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Text="{Binding Value, StringFormat=N0, ElementName=SliderSensivity, Mode=OneWay}" />
+                            <Slider
+                                Name="SliderSensivity"
+                                MinWidth="120"
+                                Margin="6,0,0,0"
+                                VerticalAlignment="Center"
+                                AutoToolTipPlacement="TopLeft"
+                                IsSnapToTickEnabled="True"
+                                LargeChange="2"
+                                Maximum="20"
+                                Minimum="1"
+                                MouseEnter="Scrolllock_MouseEnter"
+                                MouseLeave="Scrolllock_MouseLeave"
+                                SmallChange="1"
+                                TickPlacement="BottomRight"
+                                ValueChanged="SliderSensivity_ValueChanged"
+                                Value="1" />
                         </DockPanel>
+                    </controls:Setting.ActionContent>
+                </controls:Setting>
 
-                        <DockPanel Grid.Column="1" Margin="12,0,0,0">
-                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="{Binding Value, StringFormat=N0, ElementName=SliderSensivity, Mode=OneWay}" />
-                            <Slider Margin="6,0,0,0" Name="SliderSensivity" VerticalAlignment="Center" AutoToolTipPlacement="TopLeft" LargeChange="2" Maximum="20" Minimum="1" Value="1" TickPlacement="BottomRight" SmallChange="1" ValueChanged="SliderSensivity_ValueChanged" IsSnapToTickEnabled="True"
-                            MouseEnter="Scrolllock_MouseEnter"
-                            MouseLeave="Scrolllock_MouseLeave"/>
-                        </DockPanel>
-                    </Grid>
-                </Border>
-
-                <!-- Flick Stick settings -->
-                <Expander Name="Expander_FlickStick" Expanded="Expander_Expanded" HorizontalAlignment="Stretch">
+                <!--  Flick Stick settings  -->
+                <Expander
+                    Name="Expander_FlickStick"
+                    HorizontalAlignment="Stretch"
+                    Expanded="Expander_Expanded"
+                    Style="{DynamicResource SettingExpanderStyle}">
                     <Expander.Header>
-                        <DockPanel Margin="0,12,12,12">
-                            <ui:FontIcon FontFamily="{DynamicResource SymbolThemeFontFamily}" Glyph="&#xE759;" Height="40"/>
-
-                            <ui:SimpleStackPanel Margin="12,0,0,0" VerticalAlignment="Center">
-                                <TextBlock Text="{x:Static resx:Resources.ProfileSettingsMode0_FlickStick}" FontSize="14"/>
-                                <TextBlock Text="{x:Static resx:Resources.ProfileSettingsMode0_FlickStickDesc}" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" FontSize="12" TextWrapping="Wrap"/>
-                            </ui:SimpleStackPanel>
-                        </DockPanel>
+                        <controls:Setting
+                            Description="{x:Static resx:Resources.ProfileSettingsMode0_FlickStickDesc}"
+                            Header="{x:Static resx:Resources.ProfileSettingsMode0_FlickStick}"
+                            Icon="&#xE759;"
+                            Style="{DynamicResource ExpanderHeaderSettingStyle}" />
                     </Expander.Header>
-
                     <Expander.Content>
-                        <ui:SimpleStackPanel Spacing="12" Margin="30,0,0,0">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="5*" MinWidth="200"></ColumnDefinition>
-                                    <ColumnDefinition Width="3*" MinWidth="120"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
+                        <controls:SettingsGroup Margin="0,-30,0,0">
+                            <controls:Setting Header="{x:Static resx:Resources.ProfileSettingsMode0_FlickStickEnable}" Style="{DynamicResource ExpanderContentSettingStyle}">
+                                <controls:Setting.ActionContent>
+                                    <ui:ToggleSwitch
+                                        Name="Toggle_FlickStick"
+                                        Style="{DynamicResource ToggleSwitchSettingStyle}"
+                                        Toggled="Toggle_FlickStick_Toggled" />
+                                </controls:Setting.ActionContent>
+                            </controls:Setting>
 
-                                <TextBlock Text="{x:Static resx:Resources.ProfileSettingsMode0_FlickStickEnable}" FontSize="14" VerticalAlignment="Center"/>
-
-                                <ui:ToggleSwitch Grid.Column="1" Width="40" HorizontalAlignment="Right" Name="Toggle_FlickStick" Toggled="Toggle_FlickStick_Toggled"/>
-                            </Grid>
-
-                            <!-- Separator -->
-                            <Separator BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="0 1 0 0" Margin="-60,0,-60,0" />
-
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="5*" MinWidth="200"></ColumnDefinition>
-                                    <ColumnDefinition Width="3*" MinWidth="120"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock Text="{x:Static resx:Resources.ProfileSettingsMode0_FlickDuration}" FontSize="14"/>
-                                    <TextBlock Text="{x:Static resx:Resources.ProfileSettingsMode0_FlickDurationDesc}" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" FontSize="12" TextWrapping="Wrap"/>
-                                </StackPanel>
-
-                                <DockPanel Grid.Column="1" Margin="12,0,0,0">
-                                    <TextBlock VerticalAlignment="Center" Text="{Binding Value, StringFormat=N0, ElementName=tb_ProfileFlickDuration, Mode=OneWay}" />
-                                    <Slider Margin="6,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Name="tb_ProfileFlickDuration" AutoToolTipPlacement="TopLeft" LargeChange="10" Maximum="800" Minimum="100" TickFrequency="10" Value="10" TickPlacement="BottomRight" AutoToolTipPrecision="0" IsSnapToTickEnabled="True" ValueChanged="SliderFlickDuration_ValueChanged"
+                            <controls:Setting
+                                Description="{x:Static resx:Resources.ProfileSettingsMode0_FlickDurationDesc}"
+                                Header="{x:Static resx:Resources.ProfileSettingsMode0_FlickDuration}"
+                                Style="{DynamicResource ExpanderContentSettingStyle}">
+                                <controls:Setting.Resources>
+                                    <GridLength x:Key="SettingHeaderControlWidth">5*</GridLength>
+                                    <GridLength x:Key="SettingActionControlWidth">3*</GridLength>
+                                    <s:Double x:Key="SettingHeaderControlMinWidth">200</s:Double>
+                                </controls:Setting.Resources>
+                                <controls:Setting.ActionContent>
+                                    <DockPanel MinWidth="120" Margin="12,0,0,0">
+                                        <TextBlock VerticalAlignment="Center" Text="{Binding Value, StringFormat=N0, ElementName=tb_ProfileFlickDuration, Mode=OneWay}" />
+                                        <Slider
+                                            Name="tb_ProfileFlickDuration"
+                                            Margin="6,0,0,0"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Center"
+                                            AutoToolTipPlacement="TopLeft"
+                                            AutoToolTipPrecision="0"
+                                            IsSnapToTickEnabled="True"
+                                            LargeChange="10"
+                                            Maximum="800"
+                                            Minimum="100"
                                             MouseEnter="Scrolllock_MouseEnter"
-                                            MouseLeave="Scrolllock_MouseLeave"/>
-                                </DockPanel>
-                            </Grid>
+                                            MouseLeave="Scrolllock_MouseLeave"
+                                            TickFrequency="10"
+                                            TickPlacement="BottomRight"
+                                            ValueChanged="SliderFlickDuration_ValueChanged"
+                                            Value="10" />
+                                    </DockPanel>
+                                </controls:Setting.ActionContent>
+                            </controls:Setting>
 
-                            <!-- Separator -->
-                            <Separator BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="0 1 0 0" Margin="-60,0,-60,0" />
-
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="5*" MinWidth="200"></ColumnDefinition>
-                                    <ColumnDefinition Width="3*" MinWidth="120"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock Text="{x:Static resx:Resources.ProfileSettingsMode0_StickSensitivtity}" FontSize="14"/>
-                                    <TextBlock Text="{x:Static resx:Resources.ProfileSettingsMode0_StickSensitivtityDesc}" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" FontSize="12" TextWrapping="Wrap"/>
-                                </StackPanel>
-
-                                <DockPanel Grid.Column="1" Margin="12,0,0,0">
-                                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Value, StringFormat=N1, ElementName=tb_ProfileStickSensitivity, Mode=OneWay}" />
-                                    <Slider Margin="6,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Name="tb_ProfileStickSensitivity" AutoToolTipPlacement="TopLeft" LargeChange="0.1" Maximum="10" Minimum="0.1" TickFrequency="0.1" Value="10" TickPlacement="BottomRight" AutoToolTipPrecision="1" IsSnapToTickEnabled="True" ValueChanged="SliderStickSensivity_ValueChanged"
+                            <controls:Setting
+                                Description="{x:Static resx:Resources.ProfileSettingsMode0_StickSensitivtityDesc}"
+                                Header="{x:Static resx:Resources.ProfileSettingsMode0_StickSensitivtity}"
+                                Style="{DynamicResource ExpanderContentSettingStyle}">
+                                <controls:Setting.Resources>
+                                    <GridLength x:Key="SettingHeaderControlWidth">5*</GridLength>
+                                    <GridLength x:Key="SettingActionControlWidth">3*</GridLength>
+                                    <s:Double x:Key="SettingHeaderControlMinWidth">200</s:Double>
+                                </controls:Setting.Resources>
+                                <controls:Setting.ActionContent>
+                                    <DockPanel MinWidth="120" Margin="12,0,0,0">
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Text="{Binding Value, StringFormat=N1, ElementName=tb_ProfileStickSensitivity, Mode=OneWay}" />
+                                        <Slider
+                                            Name="tb_ProfileStickSensitivity"
+                                            Margin="6,0,0,0"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Center"
+                                            AutoToolTipPlacement="TopLeft"
+                                            AutoToolTipPrecision="1"
+                                            IsSnapToTickEnabled="True"
+                                            LargeChange="0.1"
+                                            Maximum="10"
+                                            Minimum="0.1"
                                             MouseEnter="Scrolllock_MouseEnter"
-                                            MouseLeave="Scrolllock_MouseLeave"/>
-                                </DockPanel>
-                            </Grid>
-                        </ui:SimpleStackPanel>
+                                            MouseLeave="Scrolllock_MouseLeave"
+                                            TickFrequency="0.1"
+                                            TickPlacement="BottomRight"
+                                            ValueChanged="SliderStickSensivity_ValueChanged"
+                                            Value="10" />
+                                    </DockPanel>
+                                </controls:Setting.ActionContent>
+                            </controls:Setting>
+
+                        </controls:SettingsGroup>
                     </Expander.Content>
                 </Expander>
-            </ui:SimpleStackPanel>
 
-            <!-- Custom response curve -->
-            <ui:SimpleStackPanel Spacing="6">
-                <Label Content="{x:Static resx:Resources.ProfileSettingsMode0_CustomResponseCurve}" FontWeight="SemiBold"></Label>
-                <Border                      
-                        Padding="0,12,12,12"
-                        CornerRadius="{DynamicResource ControlCornerRadius}"
-                        Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}">
+            </controls:SettingsGroup>
+
+            <!--  Custom response curve  -->
+            <controls:SettingsGroup Header="{x:Static resx:Resources.ProfileSettingsMode0_CustomResponseCurve}">
+                <Border
+                    Padding="0,12,12,12"
+                    Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                    CornerRadius="{DynamicResource ControlCornerRadius}">
 
                     <Grid>
-                        <ui:SimpleStackPanel Orientation="Horizontal"
-                                             HorizontalAlignment="Center"
-                                             Spacing="12"
-                                             MouseEnter="Scrolllock_MouseEnter"
-                                             MouseLeave="Scrolllock_MouseLeave"
-                                             Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}">
-                            <Label Content="{x:Static resx:Resources.ProfileSettingsMode0_CustomResponseCurveGameOutput}" VerticalAlignment="Center">
+                        <ui:SimpleStackPanel
+                            HorizontalAlignment="Center"
+                            MouseEnter="Scrolllock_MouseEnter"
+                            MouseLeave="Scrolllock_MouseLeave"
+                            Orientation="Horizontal"
+                            Spacing="12">
+                            <Label VerticalAlignment="Center" Content="{x:Static resx:Resources.ProfileSettingsMode0_CustomResponseCurveGameOutput}">
                                 <Label.LayoutTransform>
                                     <TransformGroup>
-                                        <RotateTransform Angle="90"></RotateTransform>
-                                        <ScaleTransform ScaleX="-1" ScaleY="-1"/>
+                                        <RotateTransform Angle="90" />
+                                        <ScaleTransform ScaleX="-1" ScaleY="-1" />
                                     </TransformGroup>
                                 </Label.LayoutTransform>
                             </Label>
                             <ui:SimpleStackPanel Orientation="Vertical" Spacing="12">
-                                <Label Content="{x:Static resx:Resources.ProfileSettingsMode0_CustomResponseIntensity}" HorizontalAlignment="Center"/>
-                                <ui:SimpleStackPanel Name="StackCurve" Orientation="Horizontal" Width="480" Height="400" MouseDown="StackCurve_MouseDown" MouseMove="StackCurve_MouseMove" Spacing="2">
+                                <Label HorizontalAlignment="Center" Content="{x:Static resx:Resources.ProfileSettingsMode0_CustomResponseIntensity}" />
+                                <ui:SimpleStackPanel
+                                    Name="StackCurve"
+                                    Width="480"
+                                    Height="400"
+                                    MouseDown="StackCurve_MouseDown"
+                                    MouseMove="StackCurve_MouseMove"
+                                    Orientation="Horizontal"
+                                    Spacing="2">
                                     <ui:SimpleStackPanel.Background>
-                                        <DrawingBrush TileMode="Tile" Viewport="40,40,40,40" 
-                                             ViewportUnits="Absolute">
+                                        <DrawingBrush
+                                            TileMode="Tile"
+                                            Viewport="40,40,40,40"
+                                            ViewportUnits="Absolute">
                                             <DrawingBrush.Drawing>
                                                 <GeometryDrawing>
                                                     <GeometryDrawing.Geometry>
-                                                        <RectangleGeometry Rect="50,50,50,50"/>
+                                                        <RectangleGeometry Rect="50,50,50,50" />
                                                     </GeometryDrawing.Geometry>
                                                     <GeometryDrawing.Pen>
-                                                        <Pen Brush="{DynamicResource SystemControlBackgroundChromeMediumBrush}" Thickness="1"/>
+                                                        <Pen Brush="{DynamicResource SystemControlBackgroundChromeMediumBrush}" Thickness="1" />
                                                     </GeometryDrawing.Pen>
                                                 </GeometryDrawing>
                                             </DrawingBrush.Drawing>
                                         </DrawingBrush>
                                     </ui:SimpleStackPanel.Background>
                                 </ui:SimpleStackPanel>
-                                <ui:SimpleStackPanel Name="StackIndicator" Orientation="Horizontal" Height="10">                                    
-                                </ui:SimpleStackPanel>
-                                <Label Content="{x:Static resx:Resources.ProfileSettingsMode0_CustomResponsePresetOptions}" HorizontalAlignment="Center"/>
+                                <ui:SimpleStackPanel
+                                    Name="StackIndicator"
+                                    Height="10"
+                                    Orientation="Horizontal" />
+                                <Label HorizontalAlignment="Center" Content="{x:Static resx:Resources.ProfileSettingsMode0_CustomResponsePresetOptions}" />
                                 <Grid>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="3.33*"></ColumnDefinition>
-                                        <ColumnDefinition Width="3.33*"></ColumnDefinition>
-                                        <ColumnDefinition Width="3.33*"></ColumnDefinition>
+                                        <ColumnDefinition Width="3.33*" />
+                                        <ColumnDefinition Width="3.33*" />
+                                        <ColumnDefinition Width="3.33*" />
                                     </Grid.ColumnDefinitions>
 
-                                    <Button Content="{x:Static resx:Resources.ProfileSettingsMode0_CustomResponsePresetAgressive}" HorizontalAlignment="Center" Click="Button_Click_1"></Button>
-                                    <Button Content="{x:Static resx:Resources.ProfileSettingsMode0_CustomResponsePresetDefault}" HorizontalAlignment="Center" Grid.Column="1" Click="Button_Click"></Button>
-                                    <Button Content="{x:Static resx:Resources.ProfileSettingsMode0_CustomResponsePresetPrecise}" HorizontalAlignment="Center" Grid.Column="2" Click="Button_Click_2"></Button>
+                                    <Button
+                                        HorizontalAlignment="Center"
+                                        Click="Button_Click_1"
+                                        Content="{x:Static resx:Resources.ProfileSettingsMode0_CustomResponsePresetAgressive}" />
+                                    <Button
+                                        Grid.Column="1"
+                                        HorizontalAlignment="Center"
+                                        Click="Button_Click"
+                                        Content="{x:Static resx:Resources.ProfileSettingsMode0_CustomResponsePresetDefault}" />
+                                    <Button
+                                        Grid.Column="2"
+                                        HorizontalAlignment="Center"
+                                        Click="Button_Click_2"
+                                        Content="{x:Static resx:Resources.ProfileSettingsMode0_CustomResponsePresetPrecise}" />
                                 </Grid>
                             </ui:SimpleStackPanel>
-                            <Label Content="{x:Static resx:Resources.ProfileSettingsMode0_CustomResponseCurveGameOutput}" VerticalAlignment="Center">
+                            <Label VerticalAlignment="Center" Content="{x:Static resx:Resources.ProfileSettingsMode0_CustomResponseCurveGameOutput}">
                                 <Label.LayoutTransform>
                                     <TransformGroup>
-                                        <RotateTransform Angle="-90"></RotateTransform>
-                                        <ScaleTransform ScaleX="-1" ScaleY="-1"/>
+                                        <RotateTransform Angle="-90" />
+                                        <ScaleTransform ScaleX="-1" ScaleY="-1" />
                                     </TransformGroup>
                                 </Label.LayoutTransform>
                             </Label>
                         </ui:SimpleStackPanel>
                     </Grid>
                 </Border>
-            </ui:SimpleStackPanel>
-        </ui:SimpleStackPanel>
+            </controls:SettingsGroup>
+        </StackPanel>
     </Grid>
 </Page>

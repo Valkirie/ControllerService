@@ -1,93 +1,175 @@
-<Window x:Class="HandheldCompanion.Views.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:HandheldCompanion"
-        xmlns:resx="clr-namespace:HandheldCompanion.Properties"
-        xmlns:ui="http://schemas.modernwpf.com/2019"
-        mc:Ignorable="d"
-        Title="{x:Static resx:Resources.MainWindow_HandheldCompanion}" Height="720" Width="1280"
-        Loaded="Window_Loaded"
-        Closed="Window_Closed"
-        Closing="Window_Closing"
-        StateChanged="Window_StateChanged"
-        ui:WindowHelper.UseModernWindowStyle="True"
-        MinWidth="600" MinHeight="500" Icon="/Resources/icon.png">
+<Window
+    x:Class="HandheldCompanion.Views.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:HandheldCompanion"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:resx="clr-namespace:HandheldCompanion.Properties"
+    xmlns:ui="http://schemas.modernwpf.com/2019"
+    Title="{x:Static resx:Resources.MainWindow_HandheldCompanion}"
+    Width="1280"
+    Height="720"
+    MinWidth="600"
+    MinHeight="500"
+    ui:TitleBar.ExtendViewIntoTitleBar="True"
+    ui:WindowHelper.SystemBackdropType="Mica"
+    ui:WindowHelper.UseModernWindowStyle="True"
+    Closed="Window_Closed"
+    Closing="Window_Closing"
+    Icon="/Resources/icon.png"
+    Loaded="Window_Loaded"
+    StateChanged="Window_StateChanged"
+    mc:Ignorable="d">
+    <Window.Resources>
+        <Thickness x:Key="NavigationViewContentMargin">0,48,0,0</Thickness>
+        <Thickness x:Key="NavigationViewContentGridBorderThickness">1,1,0,0</Thickness>
+        <CornerRadius x:Key="NavigationViewContentGridCornerRadius">8,0,0,0</CornerRadius>
+        <Thickness x:Key="NavigationViewHeaderMargin">56,34,0,0</Thickness>
+    </Window.Resources>
 
-    <ui:NavigationView
-        Name="navView" PaneDisplayMode="Auto"
-        ItemInvoked="navView_ItemInvoked"
-        OpenPaneLength="160" IsBackEnabled="True"
-        SelectionFollowsFocus="Enabled"
-        ShoulderNavigationEnabled="WhenSelectionFollowsFocus"
-        Loaded="navView_Loaded"
-        BackRequested="navView_BackRequested" IsSettingsVisible="False">
+    <Grid>
+        <Border
+            x:Name="AppTitleBar"
+            Grid.Column="1"
+            Height="{Binding ElementName=navView, Path=CompactPaneLength}"
+            VerticalAlignment="Top"
+            Background="Transparent"
+            Canvas.ZIndex="1"
+            IsHitTestVisible="True">
+            <TextBlock
+                x:Name="AppTitle"
+                VerticalAlignment="Center"
+                Style="{DynamicResource CaptionTextBlockStyle}"
+                Text="{Binding Title, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" />
+        </Border>
 
-        <ui:NavigationView.MenuItems>
-            <!-- Game icon -->
-            <ui:NavigationViewItem Name="navController" Content="{x:Static resx:Resources.MainWindow_navController}" Tag="ControllerPage">
-                <ui:NavigationViewItem.Icon>
-                    <ui:FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE7FC;"></ui:FontIcon>
-                </ui:NavigationViewItem.Icon>
-            </ui:NavigationViewItem>
+        <ui:NavigationView
+            Name="navView"
+            BackRequested="navView_BackRequested"
+            DisplayModeChanged="NavigationViewControl_DisplayModeChanged"
+            IsBackEnabled="True"
+            IsSettingsVisible="False"
+            IsTitleBarAutoPaddingEnabled="False"
+            ItemInvoked="navView_ItemInvoked"
+            Loaded="navView_Loaded"
+            OpenPaneLength="160"
+            PaneClosing="NavigationViewControl_PaneClosing"
+            PaneDisplayMode="Auto"
+            PaneOpening="NavigationViewControl_PaneOpening"
+            SelectionFollowsFocus="Enabled"
+            ShoulderNavigationEnabled="WhenSelectionFollowsFocus">
 
-            <!-- Profiles icon -->
-            <ui:NavigationViewItem Name="navProfiles" Content="{x:Static resx:Resources.MainWindow_navProfiles}" Tag="ProfilesPage">
-                <ui:NavigationViewItem.Icon>
-                    <ui:FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE748;"></ui:FontIcon>
-                </ui:NavigationViewItem.Icon>
-            </ui:NavigationViewItem>
+            <ui:NavigationView.MenuItems>
+                <!--  Game icon  -->
+                <ui:NavigationViewItem
+                    Name="navController"
+                    Content="{x:Static resx:Resources.MainWindow_navController}"
+                    Tag="ControllerPage">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE7FC;" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
 
-            <!-- Overlay icon -->
-            <ui:NavigationViewItem Name="navOverlay" Content="{x:Static resx:Resources.MainWindow_navOverlay}" Tag="OverlayPage">
-                <ui:NavigationViewItem.Icon>
-                    <ui:FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE78B;"></ui:FontIcon>
-                </ui:NavigationViewItem.Icon>
-            </ui:NavigationViewItem>
+                <!--  Profiles icon  -->
+                <ui:NavigationViewItem
+                    Name="navProfiles"
+                    Content="{x:Static resx:Resources.MainWindow_navProfiles}"
+                    Tag="ProfilesPage">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE748;" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
 
-            <!-- About icon -->
-            <ui:NavigationViewItem Name="navAbout" Content="{x:Static resx:Resources.MainWindow_navAbout}" Tag="AboutPage">
-                <ui:NavigationViewItem.Icon>
-                    <ui:FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE946;"></ui:FontIcon>
-                </ui:NavigationViewItem.Icon>
-            </ui:NavigationViewItem>
+                <!--  Overlay icon  -->
+                <ui:NavigationViewItem
+                    Name="navOverlay"
+                    Content="{x:Static resx:Resources.MainWindow_navOverlay}"
+                    Tag="OverlayPage">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE78B;" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
 
-            <!-- Settings -->
-            <ui:NavigationViewItem Name="navSettings" Content="{x:Static resx:Resources.MainWindow_Settings}" Tag="SettingsPage">
-                <ui:NavigationViewItem.Icon>
-                    <ui:SymbolIcon Symbol="Setting"/>
-                </ui:NavigationViewItem.Icon>
-            </ui:NavigationViewItem>
-        </ui:NavigationView.MenuItems>
+                <!--  About icon  -->
+                <ui:NavigationViewItem
+                    Name="navAbout"
+                    Content="{x:Static resx:Resources.MainWindow_navAbout}"
+                    Tag="AboutPage">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE946;" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
 
-        <ui:NavigationView.FooterMenuItems>
-            <ui:NavigationViewItem
-                ToolTipService.ShowOnDisabled="True" ToolTipService.InitialShowDelay="100"
-                Icon="Stop" Content="{x:Static resx:Resources.MainWindow_serviceStop}" Name="b_ServiceStop" Tag="ServiceStop" Background="{DynamicResource SystemControlHighlightAltListAccentLowBrush}" SelectsOnInvoked="False" />
-            <ui:NavigationViewItem
-                ToolTipService.ShowOnDisabled="True" ToolTipService.InitialShowDelay="100"
-                Icon="Play" Content="{x:Static resx:Resources.MainWindow_serviceStart}" Name="b_ServiceStart" Tag="ServiceStart" Background="{DynamicResource SystemControlHighlightAltListAccentLowBrush}" SelectsOnInvoked="False" />
-            <ui:NavigationViewItem
-                ToolTipService.ShowOnDisabled="True" ToolTipService.InitialShowDelay="100"
-                Icon="Refresh" Content="{x:Static resx:Resources.MainWindow_serviceDeploy}" Name="b_ServiceInstall" Tag="ServiceInstall" Background="{DynamicResource SystemControlHighlightAltListAccentLowBrush}" SelectsOnInvoked="False" />
-            <ui:NavigationViewItem
-                ToolTipService.ShowOnDisabled="True" ToolTipService.InitialShowDelay="100"
-                Icon="Delete" Content="{x:Static resx:Resources.MainWindow_serviceRemove}" Name="b_ServiceDelete" Tag="ServiceDelete" Background="{DynamicResource SystemControlHighlightAltListAccentLowBrush}" SelectsOnInvoked="False" />
-        </ui:NavigationView.FooterMenuItems>
+                <!--  Settings  -->
+                <ui:NavigationViewItem
+                    Name="navSettings"
+                    Content="{x:Static resx:Resources.MainWindow_Settings}"
+                    Tag="SettingsPage">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:SymbolIcon Symbol="Setting" />
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+            </ui:NavigationView.MenuItems>
 
-        <ui:ScrollViewerEx
-            PanningMode="VerticalOnly"
-            Name="scrollViewer"
-            PreviewMouseLeftButtonDown="ScrollViewer_PreviewMouseLeftButtonDown"
-            PreviewMouseMove="ScrollViewer_PreviewMouseMove"
-            PreviewMouseLeftButtonUp="ScrollViewer_PreviewMouseLeftButtonUp"
-            PreviewMouseWheel="ScrollViewer_PreviewMouseWheel"
-            MouseLeave="scrollViewer_MouseLeave">
-            <ui:Frame
-                    Width="{Binding ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type FrameworkElement}}}"
-                    Name="ContentFrame" MaxWidth="1100"
-                    HorizontalAlignment="Left"/>
-        </ui:ScrollViewerEx>
-    </ui:NavigationView>
+            <ui:NavigationView.FooterMenuItems>
+                <ui:NavigationViewItem
+                    Name="b_ServiceStop"
+                    Background="{DynamicResource SystemControlHighlightAltListAccentLowBrush}"
+                    Content="{x:Static resx:Resources.MainWindow_serviceStop}"
+                    Icon="Stop"
+                    IsEnabled="False"
+                    SelectsOnInvoked="False"
+                    Tag="ServiceStop"
+                    ToolTipService.InitialShowDelay="100"
+                    ToolTipService.ShowOnDisabled="True" />
+                <ui:NavigationViewItem
+                    Name="b_ServiceStart"
+                    Background="{DynamicResource SystemControlHighlightAltListAccentLowBrush}"
+                    Content="{x:Static resx:Resources.MainWindow_serviceStart}"
+                    Icon="Play"
+                    IsEnabled="False"
+                    SelectsOnInvoked="False"
+                    Tag="ServiceStart"
+                    ToolTipService.InitialShowDelay="100"
+                    ToolTipService.ShowOnDisabled="True" />
+                <ui:NavigationViewItem
+                    Name="b_ServiceInstall"
+                    Background="{DynamicResource SystemControlHighlightAltListAccentLowBrush}"
+                    Content="{x:Static resx:Resources.MainWindow_serviceDeploy}"
+                    Icon="Refresh"
+                    IsEnabled="False"
+                    SelectsOnInvoked="False"
+                    Tag="ServiceInstall"
+                    ToolTipService.InitialShowDelay="100"
+                    ToolTipService.ShowOnDisabled="True" />
+                <ui:NavigationViewItem
+                    Name="b_ServiceDelete"
+                    Background="{DynamicResource SystemControlHighlightAltListAccentLowBrush}"
+                    Content="{x:Static resx:Resources.MainWindow_serviceRemove}"
+                    Icon="Delete"
+                    IsEnabled="False"
+                    SelectsOnInvoked="False"
+                    Tag="ServiceDelete"
+                    ToolTipService.InitialShowDelay="100"
+                    ToolTipService.ShowOnDisabled="True" />
+            </ui:NavigationView.FooterMenuItems>
+
+            <Grid>
+                <ui:ScrollViewerEx
+                    Name="scrollViewer"
+                    MouseLeave="scrollViewer_MouseLeave"
+                    PreviewMouseLeftButtonDown="ScrollViewer_PreviewMouseLeftButtonDown"
+                    PreviewMouseLeftButtonUp="ScrollViewer_PreviewMouseLeftButtonUp"
+                    PreviewMouseMove="ScrollViewer_PreviewMouseMove"
+                    PreviewMouseWheel="ScrollViewer_PreviewMouseWheel">
+                    <ui:Frame
+                        Name="ContentFrame"
+                        Width="{Binding ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type FrameworkElement}}}"
+                        MaxWidth="1100"
+                        HorizontalAlignment="Left" />
+                </ui:ScrollViewerEx>
+            </Grid>
+        </ui:NavigationView>
+    </Grid>
 </Window>

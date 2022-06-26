@@ -257,13 +257,13 @@
     <value>修改触摸板展示位置</value>
   </data>
   <data name="OverlayPage_BackButton" xml:space="preserve">
-    <value>Back</value>
+    <value>返回</value>
   </data>
   <data name="OverlayPage_CameraAnglePitch" xml:space="preserve">
     <value>Stationary pitch</value>
   </data>
   <data name="OverlayPage_CameraAnglePitchDesc" xml:space="preserve">
-    <value>Change the angle, in degree</value>
+    <value>以度为单位更改角度</value>
   </data>
   <data name="OverlayPage_ControllerOptions" xml:space="preserve">
     <value>手柄选项</value>
@@ -326,7 +326,7 @@
     <value>修改触摸板展示大小</value>
   </data>
   <data name="OverlayPage_StartButton" xml:space="preserve">
-    <value>Start</value>
+    <value>开始</value>
   </data>
   <data name="OverlayPage_TrackpadsOptions" xml:space="preserve">
     <value>触摸板选项</value>
@@ -677,7 +677,7 @@
     <value>白色</value>
   </data>
   <data name="SettingsPage_ToastNotification" xml:space="preserve">
-    <value>烤面包通知</value>
+    <value>Toast通知</value>
   </data>
   <data name="SettingsPage_ToastNotificationDesc" xml:space="preserve">
     <value>从Windows操作中心的应用程序获取通知</value>

@@ -1,0 +1,6 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://Application:,,,/HandheldCompanion;component/Controls/Setting/Setting.xaml" />
+        <ResourceDictionary Source="pack://Application:,,,/HandheldCompanion;component/Controls/SettingsGroup/SettingsGroup.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

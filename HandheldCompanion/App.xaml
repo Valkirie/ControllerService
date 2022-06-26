@@ -1,42 +1,44 @@
-﻿<Application x:Class="HandheldCompanion.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:HandheldCompanion"
-             xmlns:converters="clr-namespace:HandheldCompanion.Converters"
-             xmlns:ui="http://schemas.modernwpf.com/2019"
-			 Startup="Main">
+﻿<Application
+    x:Class="HandheldCompanion.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:HandheldCompanion.Converters"
+    xmlns:local="clr-namespace:HandheldCompanion"
+    xmlns:ui="http://schemas.modernwpf.com/2019"
+    Startup="Main">
 
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <!-- FluentWPF Controls -->
-                <ResourceDictionary Source="/FluentWPF;component/Styles/Controls.xaml" />
-
                 <ui:ThemeResources>
                     <ui:ThemeResources.ThemeDictionaries>
-                        <ResourceDictionary x:Key="Light">
+                        <ResourceDictionary x:Key="Light" ui:ThemeDictionary.Key="Light">
                             <ResourceDictionary.MergedDictionaries>
-                                <ResourceDictionary Source="/FluentWPF;component/Styles/Colors.Light.xaml" />
-                                <ResourceDictionary Source="/FluentWPF;component/Styles/Brushes.xaml" />
-                                <ResourceDictionary Source="/ModernWpf;component/ThemeResources/Light.xaml" />
+                                <ResourceDictionary Source="/HandheldCompanion;component/Themes/Light/Color.xaml" />
                             </ResourceDictionary.MergedDictionaries>
                         </ResourceDictionary>
-                        <ResourceDictionary x:Key="Dark">
+                        <ResourceDictionary x:Key="Dark" ui:ThemeDictionary.Key="Dark">
                             <ResourceDictionary.MergedDictionaries>
-                                <ResourceDictionary Source="/FluentWPF;component/Styles/Colors.Dark.xaml" />
-                                <ResourceDictionary Source="/FluentWPF;component/Styles/Brushes.xaml" />
-                                <ResourceDictionary Source="/ModernWpf;component/ThemeResources/Dark.xaml" />
+                                <ResourceDictionary Source="/HandheldCompanion;component/Themes/Dark/Color.xaml" />
+                            </ResourceDictionary.MergedDictionaries>
+                        </ResourceDictionary>
+                        <ResourceDictionary x:Key="HighContrast" ui:ThemeDictionary.Key="HighContrast">
+                            <ResourceDictionary.MergedDictionaries>
+                                <ResourceDictionary Source="/HandheldCompanion;component/Themes/HighContrast/Color.xaml" />
                             </ResourceDictionary.MergedDictionaries>
                         </ResourceDictionary>
                     </ui:ThemeResources.ThemeDictionaries>
                 </ui:ThemeResources>
 
-                <!-- ModernWPF controls resources -->
+                <!--  ModernWPF controls resources  -->
                 <ui:XamlControlsResources />
+
+                <!--  Other merged dictionaries here  -->
+                <ResourceDictionary Source="/HandheldCompanion;component/Themes/SettingsUI.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
 
-            <!-- Other app resources here -->
+            <!--  Other app resources here  -->
             <converters:InverseAppThemeConverter x:Key="InverseAppThemeConverter" />
 
         </ResourceDictionary>

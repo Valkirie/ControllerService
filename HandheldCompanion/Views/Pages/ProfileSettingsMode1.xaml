@@ -1,85 +1,114 @@
-<Page x:Class="HandheldCompanion.Views.Pages.ProfileSettingsMode1"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:ui="http://schemas.modernwpf.com/2019"
-      xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
-      xmlns:ikriv="clr-namespace:IKriv.Wpf"
-      xmlns:resx="clr-namespace:HandheldCompanion.Properties"
-      mc:Ignorable="d" 
-      d:DesignHeight="1000" d:DesignWidth="1000"
-      Title="{x:Static resx:Resources.ProfileSettingsMode1_AdditionalSettings}"
-      Loaded="Page_Loaded">
+<Page
+    x:Class="HandheldCompanion.Views.Pages.ProfileSettingsMode1"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:HandheldCompanion.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:ikriv="clr-namespace:IKriv.Wpf"
+    xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:resx="clr-namespace:HandheldCompanion.Properties"
+    xmlns:s="clr-namespace:System;assembly=mscorlib"
+    xmlns:ui="http://schemas.modernwpf.com/2019"
+    Title="{x:Static resx:Resources.ProfileSettingsMode1_AdditionalSettings}"
+    d:DesignHeight="1000"
+    d:DesignWidth="1000"
+    Loaded="Page_Loaded"
+    mc:Ignorable="d">
 
-    <Grid Name="MainGrid" Margin="20">
-        <ui:SimpleStackPanel Spacing="12">
+    <Grid Name="MainGrid" Margin="56,20,12,36">
+        <StackPanel>
 
-            <!-- Joystick steering preview -->
-            <ui:SimpleStackPanel Spacing="6">
-                <Label Content="{x:Static resx:Resources.ProfileSettingsMode1_JoystickSteeringPreview}" FontWeight="SemiBold"></Label>
+            <!--  Joystick steering preview  -->
+            <controls:SettingsGroup Margin="0,-32,0,0" Header="{x:Static resx:Resources.ProfileSettingsMode1_JoystickSteeringPreview}">
 
-                <!-- Steering Visuals -->
+                <!--  Steering Visuals  -->
                 <Border
                     Height="200"
                     Padding="0,12,12,12"
-                    CornerRadius="{DynamicResource ControlCornerRadius}"
-                    Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}">
+                    Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+                    CornerRadius="{DynamicResource ControlCornerRadius}">
 
                     <Grid Name="SteeringVisualsGrid">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="5*" MinWidth="200"/>
-                            <ColumnDefinition Width="5*" MinWidth="200"/>
+                            <ColumnDefinition Width="5*" MinWidth="200" />
+                            <ColumnDefinition Width="5*" MinWidth="200" />
                         </Grid.ColumnDefinitions>
 
                         <lvc:AngularGauge
-                        Name = "lvAngularGauge"
-                        FromValue="-80" ToValue="80"  
-                        LabelsStep="20" TicksStep="10" Wedge="160" 
-                        NeedleFill="{DynamicResource SystemControlForegroundAccentBrush}"
-                        TicksForeground="{DynamicResource SystemControlForegroundBaseMediumHighBrush}"
-                        FontSize="12" 
-                        SectionsInnerRadius="0.25"
-                        Margin="0,0,0,-130"
-                        DisableaAnimations="True"
-                        LabelsEffect="{x:Null}"
-                        Grid.Column="0">
+                            Name="lvAngularGauge"
+                            Grid.Column="0"
+                            Margin="0,0,0,-130"
+                            DisableaAnimations="True"
+                            FontSize="12"
+                            FromValue="-80"
+                            LabelsEffect="{x:Null}"
+                            LabelsStep="20"
+                            NeedleFill="{DynamicResource SystemControlForegroundAccentBrush}"
+                            SectionsInnerRadius="0.25"
+                            TicksForeground="{DynamicResource SystemControlForegroundBaseMediumHighBrush}"
+                            TicksStep="10"
+                            ToValue="80"
+                            Wedge="160">
 
                             <lvc:AngularGauge.Sections>
-                                <lvc:AngularSection FromValue="-80" ToValue="{Binding Value, ElementName=SliderSteeringAngle, Converter={ikriv:MathConverter}, ConverterParameter=x*-1}" Fill="{DynamicResource SystemControlHighlightListMediumBrush}"/>
-                                <lvc:AngularSection FromValue="{Binding Value, ElementName=SliderDeadzoneAngle, Converter={ikriv:MathConverter}, ConverterParameter=x*-1}" ToValue="{Binding Value, ElementName=SliderDeadzoneAngle}" Fill="#94221C"/>
-                                <lvc:AngularSection FromValue="{Binding Value, ElementName=SliderSteeringAngle}" ToValue="80" Fill="{DynamicResource SystemControlHighlightListMediumBrush}"/>
+                                <lvc:AngularSection
+                                    Fill="{DynamicResource SystemControlHighlightListMediumBrush}"
+                                    FromValue="-80"
+                                    ToValue="{Binding Value, ElementName=SliderSteeringAngle, Converter={ikriv:MathConverter}, ConverterParameter=x*-1}" />
+                                <lvc:AngularSection
+                                    Fill="#94221C"
+                                    FromValue="{Binding Value, ElementName=SliderDeadzoneAngle, Converter={ikriv:MathConverter}, ConverterParameter=x*-1}"
+                                    ToValue="{Binding Value, ElementName=SliderDeadzoneAngle}" />
+                                <lvc:AngularSection
+                                    Fill="{DynamicResource SystemControlHighlightListMediumBrush}"
+                                    FromValue="{Binding Value, ElementName=SliderSteeringAngle}"
+                                    ToValue="80" />
                             </lvc:AngularGauge.Sections>
                         </lvc:AngularGauge>
 
-                        <lvc:CartesianChart LegendLocation="None" Grid.Column="1" Hoverable="False" DisableAnimations="True">
+                        <lvc:CartesianChart
+                            Grid.Column="1"
+                            DisableAnimations="True"
+                            Hoverable="False"
+                            LegendLocation="None">
                             <lvc:CartesianChart.Series>
                                 <lvc:LineSeries
-                                Name = "lvLineSeriesDefault"
-                                StrokeThickness="1"
-                                Stroke="{DynamicResource SystemControlHighlightListMediumBrush}" 
-                                Fill="Transparent" 
-                                LineSmoothness="0" 
-                                PointGeometry="{x:Null}" />
+                                    Name="lvLineSeriesDefault"
+                                    Fill="Transparent"
+                                    LineSmoothness="0"
+                                    PointGeometry="{x:Null}"
+                                    Stroke="{DynamicResource SystemControlHighlightListMediumBrush}"
+                                    StrokeThickness="1" />
                                 <lvc:LineSeries
-                                Name = "lvLineSeriesValues"
-                                StrokeThickness="2" 
-                                Stroke="{DynamicResource SystemControlForegroundAccentBrush}" 
-                                Fill="Transparent" 
-                                LineSmoothness="1" 
-                                PointGeometry="{x:Null}" />
+                                    Name="lvLineSeriesValues"
+                                    Fill="Transparent"
+                                    LineSmoothness="1"
+                                    PointGeometry="{x:Null}"
+                                    Stroke="{DynamicResource SystemControlForegroundAccentBrush}"
+                                    StrokeThickness="2" />
                             </lvc:CartesianChart.Series>
                             <lvc:CartesianChart.AxisY>
-                                <lvc:Axis Title="{x:Static resx:Resources.ProfileSettingsMode1_JoystickGameInput}" MinValue="0.0" MaxValue="1.00001" FontSize="12" Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}">
+                                <lvc:Axis
+                                    Title="{x:Static resx:Resources.ProfileSettingsMode1_JoystickGameInput}"
+                                    FontSize="12"
+                                    Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+                                    MaxValue="1.00001"
+                                    MinValue="0.0">
                                     <lvc:Axis.Separator>
-                                        <lvc:Separator Stroke="{DynamicResource SystemControlPageTextBaseHighBrush}"/>
+                                        <lvc:Separator Stroke="{DynamicResource SystemControlPageTextBaseHighBrush}" />
                                     </lvc:Axis.Separator>
                                 </lvc:Axis>
                             </lvc:CartesianChart.AxisY>
                             <lvc:CartesianChart.AxisX>
-                                <lvc:Axis Title="{x:Static resx:Resources.ProfileSettingsMode1_JoystickSteering}" MinValue="0" MaxValue="1.00001" FontSize="12" Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}">
+                                <lvc:Axis
+                                    Title="{x:Static resx:Resources.ProfileSettingsMode1_JoystickSteering}"
+                                    FontSize="12"
+                                    Foreground="{DynamicResource SystemControlPageTextBaseHighBrush}"
+                                    MaxValue="1.00001"
+                                    MinValue="0">
                                     <lvc:Axis.Separator>
-                                        <lvc:Separator Stroke="{DynamicResource SystemControlPageTextBaseHighBrush}"/>
+                                        <lvc:Separator Stroke="{DynamicResource SystemControlPageTextBaseHighBrush}" />
                                     </lvc:Axis.Separator>
                                 </lvc:Axis>
                             </lvc:CartesianChart.AxisX>
@@ -87,101 +116,120 @@
 
                     </Grid>
                 </Border>
-            </ui:SimpleStackPanel>
 
-            <ui:SimpleStackPanel Spacing="6">
-                <Label Content="{x:Static resx:Resources.ProfileSettingsMode1_JoystickSteeringOptions}" FontWeight="SemiBold"></Label>
+            </controls:SettingsGroup>
 
-                <!-- Steering angle -->
-                <Border                      
-                        Padding="15,12,12,12"
-                        CornerRadius="{DynamicResource ControlCornerRadius}"
-                        Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}">
+            <controls:SettingsGroup Header="{x:Static resx:Resources.ProfileSettingsMode1_JoystickSteeringOptions}">
 
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="5*" MinWidth="200"></ColumnDefinition>
-                            <ColumnDefinition Width="3*" MinWidth="120"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-
-                        <DockPanel>
-                            <ui:FontIcon FontFamily="{DynamicResource SymbolThemeFontFamily}" Glyph="&#xECE7;" Height="40" HorizontalAlignment="Center"/>
-
-                            <ui:SimpleStackPanel VerticalAlignment="Center" Margin="12,0,0,0">
-                                <TextBlock Text="{x:Static resx:Resources.ProfileSettingsMode1_MaxSteeringAngle}" FontSize="14"/>
-                                <TextBlock Text="{x:Static resx:Resources.ProfileSettingsMode1_MaxSteeringAngleDesc}" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" FontSize="12" TextWrapping="Wrap"/>
-                            </ui:SimpleStackPanel>
+                <!--  Steering angle  -->
+                <controls:Setting
+                    Description="{x:Static resx:Resources.ProfileSettingsMode1_MaxSteeringAngleDesc}"
+                    Header="{x:Static resx:Resources.ProfileSettingsMode1_MaxSteeringAngle}"
+                    Icon="&#xECE7;">
+                    <controls:Setting.Resources>
+                        <GridLength x:Key="SettingHeaderControlWidth">5*</GridLength>
+                        <GridLength x:Key="SettingActionControlWidth">3*</GridLength>
+                        <s:Double x:Key="SettingHeaderControlMinWidth">200</s:Double>
+                    </controls:Setting.Resources>
+                    <controls:Setting.ActionContent>
+                        <DockPanel MinWidth="120" Margin="12,0,0,0">
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Text="{Binding Value, ElementName=SliderSteeringAngle, Mode=OneWay}" />
+                            <Slider
+                                Name="SliderSteeringAngle"
+                                Grid.Column="4"
+                                Margin="6,0,0,0"
+                                VerticalAlignment="Center"
+                                AutoToolTipPlacement="TopLeft"
+                                IsSnapToTickEnabled="True"
+                                LargeChange="10"
+                                Maximum="80"
+                                Minimum="10"
+                                MouseEnter="Scrolllock_MouseEnter"
+                                MouseLeave="Scrolllock_MouseLeave"
+                                SmallChange="5"
+                                TickFrequency="1"
+                                TickPlacement="BottomRight"
+                                ValueChanged="SliderSteeringAngle_ValueChanged"
+                                Value="35" />
                         </DockPanel>
+                    </controls:Setting.ActionContent>
+                </controls:Setting>
 
-                        <DockPanel Grid.Column="1" Margin="12,0,0,0">
-                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Value, ElementName=SliderSteeringAngle, Mode=OneWay}" />
-                            <Slider Margin="6,0,0,0" Name="SliderSteeringAngle" ValueChanged="SliderSteeringAngle_ValueChanged" Grid.Column="4" VerticalAlignment="Center" AutoToolTipPlacement="TopLeft" LargeChange="10" Maximum="80" Minimum="10" Value="35" TickPlacement="BottomRight" SmallChange="5" TickFrequency="1" IsSnapToTickEnabled="True"
-                            MouseEnter="Scrolllock_MouseEnter"
-                            MouseLeave="Scrolllock_MouseLeave"/>
+                <!--  Power  -->
+                <controls:Setting
+                    Description="{x:Static resx:Resources.ProfileSettingsMode1_SteeringLinearityDesc}"
+                    Header="{x:Static resx:Resources.ProfileSettingsMode1_SteeringLinearity}"
+                    Icon="&#xECE7;">
+                    <controls:Setting.Resources>
+                        <GridLength x:Key="SettingHeaderControlWidth">5*</GridLength>
+                        <GridLength x:Key="SettingActionControlWidth">3*</GridLength>
+                        <s:Double x:Key="SettingHeaderControlMinWidth">200</s:Double>
+                    </controls:Setting.Resources>
+                    <controls:Setting.ActionContent>
+                        <DockPanel MinWidth="120" Margin="12,0,0,0">
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Text="{Binding Value, StringFormat=N1, ElementName=SliderPower, Mode=OneWay}" />
+                            <Slider
+                                Name="SliderPower"
+                                Grid.Column="4"
+                                Margin="6,0,0,0"
+                                VerticalAlignment="Center"
+                                AutoToolTipPlacement="TopLeft"
+                                AutoToolTipPrecision="1"
+                                IsSnapToTickEnabled="True"
+                                LargeChange="0.5"
+                                Maximum="5"
+                                Minimum="0.2"
+                                MouseEnter="Scrolllock_MouseEnter"
+                                MouseLeave="Scrolllock_MouseLeave"
+                                TickFrequency="0.1"
+                                TickPlacement="BottomRight"
+                                ValueChanged="SliderPower_ValueChanged"
+                                Value="1" />
                         </DockPanel>
-                    </Grid>
-                </Border>
+                    </controls:Setting.ActionContent>
+                </controls:Setting>
 
-                <!-- Power -->
-                <Border                      
-                        Padding="15,12,12,12"
-                        CornerRadius="{DynamicResource ControlCornerRadius}"
-                        Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}">
-
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="5*" MinWidth="200"></ColumnDefinition>
-                            <ColumnDefinition Width="3*" MinWidth="120"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-
-                        <DockPanel>
-                            <ui:FontIcon FontFamily="{DynamicResource SymbolThemeFontFamily}" Glyph="&#xECE7;" Height="40" HorizontalAlignment="Center"/>
-
-                            <ui:SimpleStackPanel VerticalAlignment="Center" Margin="12,0,0,0">
-                                <TextBlock Text="{x:Static resx:Resources.ProfileSettingsMode1_SteeringLinearity}" FontSize="14"/>
-                                <TextBlock Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" FontSize="12" TextWrapping="Wrap" Text="{x:Static resx:Resources.ProfileSettingsMode1_SteeringLinearityDesc}" />
-                            </ui:SimpleStackPanel>
+                <!--  Deadzone  -->
+                <controls:Setting
+                    Description="{x:Static resx:Resources.ProfileSettingsMode1_DeadzoneDesc}"
+                    Header="{x:Static resx:Resources.ProfileSettingsMode1_Deadzone}"
+                    Icon="&#xECE7;">
+                    <controls:Setting.Resources>
+                        <GridLength x:Key="SettingHeaderControlWidth">5*</GridLength>
+                        <GridLength x:Key="SettingActionControlWidth">3*</GridLength>
+                        <s:Double x:Key="SettingHeaderControlMinWidth">200</s:Double>
+                    </controls:Setting.Resources>
+                    <controls:Setting.ActionContent>
+                        <DockPanel MinWidth="120" Margin="12,0,0,0">
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Text="{Binding Value, ElementName=SliderDeadzoneAngle, Mode=OneWay}" />
+                            <Slider
+                                Name="SliderDeadzoneAngle"
+                                Grid.Column="4"
+                                Margin="6,0,0,0"
+                                VerticalAlignment="Center"
+                                AutoToolTipPlacement="TopLeft"
+                                IsSnapToTickEnabled="True"
+                                LargeChange="2"
+                                Maximum="5"
+                                MouseEnter="Scrolllock_MouseEnter"
+                                MouseLeave="Scrolllock_MouseLeave"
+                                SmallChange="1"
+                                TickPlacement="BottomRight"
+                                ValueChanged="SliderDeadzoneAngle_ValueChanged" />
                         </DockPanel>
+                    </controls:Setting.ActionContent>
+                </controls:Setting>
 
-                        <DockPanel Grid.Column="1" Margin="12,0,0,0">
-                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Value, StringFormat=N1, ElementName=SliderPower, Mode=OneWay}" />
-                            <Slider Margin="6,0,0,0" Name="SliderPower" ValueChanged="SliderPower_ValueChanged" Grid.Column="4" VerticalAlignment="Center" AutoToolTipPlacement="TopLeft" LargeChange="0.5" Maximum="5" Minimum="0.2" Value="1" TickPlacement="BottomRight" TickFrequency="0.1" AutoToolTipPrecision="1" IsSnapToTickEnabled="True"
-                            MouseEnter="Scrolllock_MouseEnter"
-                            MouseLeave="Scrolllock_MouseLeave"/>
-                        </DockPanel>
-                    </Grid>
-                </Border>
-
-                <!-- Deadzone -->
-                <Border                      
-                        Padding="15,12,12,12"
-                        CornerRadius="{DynamicResource ControlCornerRadius}"
-                        Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}">
-
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="5*" MinWidth="200"></ColumnDefinition>
-                            <ColumnDefinition Width="3*" MinWidth="120"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-
-                        <DockPanel>
-                            <ui:FontIcon FontFamily="{DynamicResource SymbolThemeFontFamily}" Glyph="&#xECE7;" Height="40" HorizontalAlignment="Center"/>
-
-                            <ui:SimpleStackPanel VerticalAlignment="Center" Margin="12,0,0,0">
-                                <TextBlock Text="{x:Static resx:Resources.ProfileSettingsMode1_Deadzone}" FontSize="14"/>
-                                <TextBlock Text="{x:Static resx:Resources.ProfileSettingsMode1_DeadzoneDesc}" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" FontSize="12" TextWrapping="Wrap"/>
-                            </ui:SimpleStackPanel>
-                        </DockPanel>
-
-                        <DockPanel Grid.Column="1" Margin="12,0,0,0">
-                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Value, ElementName=SliderDeadzoneAngle, Mode=OneWay}" />
-                            <Slider Margin="6,0,0,0" Name="SliderDeadzoneAngle" ValueChanged="SliderDeadzoneAngle_ValueChanged" Grid.Column="4" VerticalAlignment="Center" AutoToolTipPlacement="TopLeft" LargeChange="2" Maximum="5" TickPlacement="BottomRight" SmallChange="1" IsSnapToTickEnabled="True"
-                            MouseEnter="Scrolllock_MouseEnter"
-                            MouseLeave="Scrolllock_MouseLeave"/>
-                        </DockPanel>
-                    </Grid>
-                </Border>
-            </ui:SimpleStackPanel>
-        </ui:SimpleStackPanel>
+            </controls:SettingsGroup>
+        </StackPanel>
     </Grid>
 </Page>

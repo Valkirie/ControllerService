@@ -1,0 +1,21 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:s="clr-namespace:System;assembly=mscorlib"
+    xmlns:ui="http://schemas.modernwpf.com/2019">
+    <Style x:Key="OobeSubtitleStyle" TargetType="TextBlock">
+        <Setter Property="Margin" Value="0,16,0,0" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="FontFamily" Value="XamlAutoFontFamily" />
+        <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+        <Setter Property="LineStackingStrategy" Value="MaxHeight" />
+        <Setter Property="FontSize" Value="{DynamicResource BodyTextBlockFontSize}" />
+        <Setter Property="Foreground" Value="{DynamicResource DefaultTextForegroundThemeBrush}" />
+    </Style>
+    <s:Double x:Key="SecondaryTextFontSize">12</s:Double>
+    <Style x:Key="SecondaryTextStyle" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{DynamicResource SecondaryTextFontSize}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+    </Style>
+</ResourceDictionary>

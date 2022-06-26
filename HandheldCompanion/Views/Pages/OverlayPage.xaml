@@ -1,448 +1,731 @@
-﻿<Page x:Class="HandheldCompanion.Views.Pages.OverlayPage"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:ui="http://schemas.modernwpf.com/2019"
-      xmlns:local="clr-namespace:HandheldCompanion" 
-      xmlns:pages="clr-namespace:HandheldCompanion.Views.Pages"
-      xmlns:resx="clr-namespace:HandheldCompanion.Properties"
-      mc:Ignorable="d" 
-      d:DesignHeight="1500" d:DesignWidth="1000"
-      KeepAlive="True"
-      Loaded="Page_Loaded"
-      Title="{x:Static resx:Resources.OverlayPage_Overlay}">
+﻿<Page
+    x:Class="HandheldCompanion.Views.Pages.OverlayPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:HandheldCompanion.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:HandheldCompanion"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:pages="clr-namespace:HandheldCompanion.Views.Pages"
+    xmlns:resx="clr-namespace:HandheldCompanion.Properties"
+    xmlns:ui="http://schemas.modernwpf.com/2019"
+    Title="{x:Static resx:Resources.OverlayPage_Overlay}"
+    d:DesignHeight="1500"
+    d:DesignWidth="1000"
+    KeepAlive="True"
+    Loaded="Page_Loaded"
+    mc:Ignorable="d">
 
-    <Grid Name="MainGrid" Margin="20">
-        <ui:SimpleStackPanel Spacing="24">
-            <ui:SimpleStackPanel Spacing="6">
-                
-                <!-- Overlay preview -->
-                <Label Content="{x:Static resx:Resources.OverlayPage_OverlayPreview}" FontWeight="SemiBold"></Label>
+    <Grid Name="MainGrid" Margin="56,20,12,36">
+        <StackPanel>
+            <controls:SettingsGroup Margin="0,-32,0,0" Header="{x:Static resx:Resources.OverlayPage_OverlayPreview}">
+
+                <!--  Overlay preview  -->
                 <Border
-                        Padding="12"
-                        CornerRadius="{DynamicResource ControlCornerRadius}"
-                        ui:ThemeManager.RequestedTheme="{Binding Source={x:Static ui:ThemeManager.Current}, Path=ActualApplicationTheme, Converter={StaticResource InverseAppThemeConverter}}">
+                    Padding="12"
+                    ui:ThemeManager.RequestedTheme="{Binding Source={x:Static ui:ThemeManager.Current}, Path=ActualApplicationTheme, Converter={StaticResource InverseAppThemeConverter}}"
+                    CornerRadius="{DynamicResource ControlCornerRadius}">
                     <Border.Background>
-                        <ImageBrush Stretch="UniformToFill" ImageSource="/Resources/overlay_back.jpg"/>
+                        <ImageBrush ImageSource="/Resources/overlay_back.jpg" Stretch="UniformToFill" />
                     </Border.Background>
 
                     <Grid Height="250">
                         <Grid Name="TrackpadsPositionUI">
                             <Border
-                                CornerRadius="4"
+                                Width="80"
+                                Height="80"
                                 HorizontalAlignment="Left"
                                 Background="Black"
-                                Opacity="0.5"
-                                Width="80" Height="80"></Border>
-                            <Border
                                 CornerRadius="4"
+                                Opacity="0.5" />
+                            <Border
+                                Width="80"
+                                Height="80"
                                 HorizontalAlignment="Right"
                                 Background="Black"
-                                Opacity="0.5"
-                                Width="80" Height="80"></Border>
+                                CornerRadius="4"
+                                Opacity="0.5" />
                         </Grid>
                         <Grid Name="ControllerPositionUI">
-                            <ui:FontIcon Glyph="&#xF158;" Foreground="Black" Opacity="0.5" FontSize="60" Margin="4,4,0,0"/>
-                            <ui:FontIcon Glyph="&#xF158;" Foreground="{DynamicResource SystemControlBackgroundAccentBrush}" FontSize="60"/>
+                            <ui:FontIcon
+                                Margin="4,4,0,0"
+                                FontSize="60"
+                                Foreground="Black"
+                                Glyph="&#xF158;"
+                                Opacity="0.5" />
+                            <ui:FontIcon
+                                FontSize="60"
+                                Foreground="{DynamicResource SystemControlBackgroundAccentBrush}"
+                                Glyph="&#xF158;" />
                         </Grid>
                     </Grid>
                 </Border>
-            </ui:SimpleStackPanel>
 
-            <!-- Controller options -->
-            <ui:SimpleStackPanel Spacing="6">
-                <Label Content="{x:Static resx:Resources.OverlayPage_ControllerOptions}" FontWeight="SemiBold"></Label>
-                
-                <!-- Controller model -->
-                <Border                      
-                            Padding="15,12,12,12"
-                            CornerRadius="{DynamicResource ControlCornerRadius}"
-                            Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}">
+            </controls:SettingsGroup>
+
+            <!--  Controller options  -->
+            <controls:SettingsGroup Header="{x:Static resx:Resources.OverlayPage_ControllerOptions}">
+
+                <!--  Controller model  -->
+                <Border
+                    Padding="15,12,12,12"
+                    Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                    CornerRadius="{DynamicResource ControlCornerRadius}">
 
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="5*" MinWidth="200"></ColumnDefinition>
-                            <ColumnDefinition Width="3*" MinWidth="120"></ColumnDefinition>
+                            <ColumnDefinition Width="5*" MinWidth="200" />
+                            <ColumnDefinition Width="3*" MinWidth="120" />
                         </Grid.ColumnDefinitions>
 
                         <DockPanel>
-                            <ui:FontIcon FontFamily="{DynamicResource SymbolThemeFontFamily}" Glyph="&#xF158;" Height="40" HorizontalAlignment="Center"/>
+                            <ui:FontIcon
+                                Height="40"
+                                HorizontalAlignment="Center"
+                                FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                                Glyph="&#xF158;" />
 
-                            <ui:SimpleStackPanel VerticalAlignment="Center" Margin="12,0,0,0">
-                                <TextBlock Text="{x:Static resx:Resources.OverlayPage_OverlayModel}" FontSize="14"/>
-                                <TextBlock Text="{x:Static resx:Resources.OverlayPage_OverlayModelDesc}" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" FontSize="12" TextWrapping="Wrap"/>
+                            <ui:SimpleStackPanel Margin="12,0,0,0" VerticalAlignment="Center">
+                                <TextBlock FontSize="14" Text="{x:Static resx:Resources.OverlayPage_OverlayModel}" />
+                                <TextBlock
+                                    FontSize="12"
+                                    Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                    Text="{x:Static resx:Resources.OverlayPage_OverlayModelDesc}"
+                                    TextWrapping="Wrap" />
                             </ui:SimpleStackPanel>
                         </DockPanel>
 
-                        <ui:RadioButtons Name="OverlayModel" Grid.Column="1" HorizontalAlignment="Right" SelectionChanged="OverlayModel_SelectionChanged">
+                        <ui:RadioButtons
+                            Name="OverlayModel"
+                            Grid.Column="1"
+                            HorizontalAlignment="Right"
+                            SelectionChanged="OverlayModel_SelectionChanged">
                             <RadioButton Name="OEMControllerRadio" IsEnabled="False">
-                                <Label Content="{x:Static resx:Resources.OverlayPage_OEMController}"></Label>
+                                <Label Content="{x:Static resx:Resources.OverlayPage_OEMController}" />
                             </RadioButton>
                             <RadioButton Name="VirtualControllerRadio">
-                                <Label Content="{x:Static resx:Resources.OverlayPage_EmulatedController}"></Label>
+                                <Label Content="{x:Static resx:Resources.OverlayPage_EmulatedController}" />
                             </RadioButton>
                             <RadioButton Name="ZDOPlusRadio">
-                                <Label Content="{x:Static resx:Resources.OverlayPage_ZDOPlusController}"></Label>
+                                <Label Content="{x:Static resx:Resources.OverlayPage_ZDOPlusController}" />
                             </RadioButton>
                             <RadioButton Name="ToyControllerRadio" IsEnabled="False">
-                                <Label Content="{x:Static resx:Resources.OverlayPage_ToyController}"></Label>
+                                <Label Content="{x:Static resx:Resources.OverlayPage_ToyController}" />
                             </RadioButton>
                         </ui:RadioButtons>
                     </Grid>
                 </Border>
 
-                <!-- Controller Alignment -->
-                <Border                      
-                        Padding="15,12,12,12"
-                        CornerRadius="{DynamicResource ControlCornerRadius}"
-                        Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}">
+                <!--  Controller Alignment  -->
+                <Border
+                    Padding="15,12,12,12"
+                    Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                    CornerRadius="{DynamicResource ControlCornerRadius}">
 
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="5*" MinWidth="200"></ColumnDefinition>
-                            <ColumnDefinition Width="3*" MinWidth="120"></ColumnDefinition>
+                            <ColumnDefinition Width="5*" MinWidth="200" />
+                            <ColumnDefinition Width="3*" MinWidth="120" />
                         </Grid.ColumnDefinitions>
 
                         <DockPanel>
-                            <ui:FontIcon FontFamily="{DynamicResource SymbolThemeFontFamily}" Glyph="&#xE80A;" Height="40" HorizontalAlignment="Center"/>
+                            <ui:FontIcon
+                                Height="40"
+                                HorizontalAlignment="Center"
+                                FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                                Glyph="&#xE80A;" />
 
-                            <ui:SimpleStackPanel VerticalAlignment="Center" Margin="12,0,0,0">
-                                <TextBlock Text="{x:Static resx:Resources.OverlayPage_Alignment}" FontSize="14"/>
-                                <TextBlock Text="{x:Static resx:Resources.OverlayPage_AlignmentDesc}" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" FontSize="12" TextWrapping="Wrap"/>
+                            <ui:SimpleStackPanel Margin="12,0,0,0" VerticalAlignment="Center">
+                                <TextBlock FontSize="14" Text="{x:Static resx:Resources.OverlayPage_Alignment}" />
+                                <TextBlock
+                                    FontSize="12"
+                                    Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                    Text="{x:Static resx:Resources.OverlayPage_AlignmentDesc}"
+                                    TextWrapping="Wrap" />
                             </ui:SimpleStackPanel>
                         </DockPanel>
 
                         <Grid Grid.Column="1">
-                            <ui:SimpleStackPanel Name="OverlayControllerAlignment" Spacing="6" HorizontalAlignment="Right">
+                            <ui:SimpleStackPanel
+                                Name="OverlayControllerAlignment"
+                                HorizontalAlignment="Right"
+                                Spacing="6">
                                 <ui:SimpleStackPanel Orientation="Horizontal" Spacing="6">
-                                    <Button Tag="0" Width="50" Height="50" Click="ControllerAlignment_Click"></Button>
-                                    <Button Tag="1" Width="50" Height="50" Click="ControllerAlignment_Click"></Button>
-                                    <Button Tag="2" Width="50" Height="50" Click="ControllerAlignment_Click"></Button>
+                                    <Button
+                                        Width="50"
+                                        Height="50"
+                                        Click="ControllerAlignment_Click"
+                                        Tag="0" />
+                                    <Button
+                                        Width="50"
+                                        Height="50"
+                                        Click="ControllerAlignment_Click"
+                                        Tag="1" />
+                                    <Button
+                                        Width="50"
+                                        Height="50"
+                                        Click="ControllerAlignment_Click"
+                                        Tag="2" />
                                 </ui:SimpleStackPanel>
                                 <ui:SimpleStackPanel Orientation="Horizontal" Spacing="6">
-                                    <Button Tag="3" Width="50" Height="50" Click="ControllerAlignment_Click"></Button>
-                                    <Button Tag="4" Width="50" Height="50" Click="ControllerAlignment_Click"></Button>
-                                    <Button Tag="5" Width="50" Height="50" Click="ControllerAlignment_Click"></Button>
+                                    <Button
+                                        Width="50"
+                                        Height="50"
+                                        Click="ControllerAlignment_Click"
+                                        Tag="3" />
+                                    <Button
+                                        Width="50"
+                                        Height="50"
+                                        Click="ControllerAlignment_Click"
+                                        Tag="4" />
+                                    <Button
+                                        Width="50"
+                                        Height="50"
+                                        Click="ControllerAlignment_Click"
+                                        Tag="5" />
                                 </ui:SimpleStackPanel>
                                 <ui:SimpleStackPanel Orientation="Horizontal" Spacing="6">
-                                    <Button Tag="6" Width="50" Height="50" Click="ControllerAlignment_Click"></Button>
-                                    <Button Tag="7" Width="50" Height="50" Click="ControllerAlignment_Click"></Button>
-                                    <Button Tag="8" Width="50" Height="50" Click="ControllerAlignment_Click"></Button>
+                                    <Button
+                                        Width="50"
+                                        Height="50"
+                                        Click="ControllerAlignment_Click"
+                                        Tag="6" />
+                                    <Button
+                                        Width="50"
+                                        Height="50"
+                                        Click="ControllerAlignment_Click"
+                                        Tag="7" />
+                                    <Button
+                                        Width="50"
+                                        Height="50"
+                                        Click="ControllerAlignment_Click"
+                                        Tag="8" />
                                 </ui:SimpleStackPanel>
                             </ui:SimpleStackPanel>
                         </Grid>
                     </Grid>
                 </Border>
-                
-                <!-- Size -->
-                <Border                      
-                        Padding="15,12,12,12"
-                        CornerRadius="{DynamicResource ControlCornerRadius}"
-                        Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}">
+
+                <!--  Size  -->
+                <Border
+                    Padding="15,12,12,12"
+                    Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                    CornerRadius="{DynamicResource ControlCornerRadius}">
 
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="5*" MinWidth="200"></ColumnDefinition>
-                            <ColumnDefinition Width="3*" MinWidth="120"></ColumnDefinition>
+                            <ColumnDefinition Width="5*" MinWidth="200" />
+                            <ColumnDefinition Width="3*" MinWidth="120" />
                         </Grid.ColumnDefinitions>
 
                         <DockPanel>
-                            <ui:FontIcon FontFamily="{DynamicResource SymbolThemeFontFamily}" Glyph="&#xECC6;" Height="40" HorizontalAlignment="Center"/>
+                            <ui:FontIcon
+                                Height="40"
+                                HorizontalAlignment="Center"
+                                FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                                Glyph="&#xECC6;" />
 
-                            <ui:SimpleStackPanel VerticalAlignment="Center" Margin="12,0,0,0">
-                                <TextBlock Text="{x:Static resx:Resources.OverlayPage_Size}" FontSize="14"/>
-                                <TextBlock Text="{x:Static resx:Resources.OverlayPage_SizeDesc}" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" FontSize="12" TextWrapping="Wrap"/>
+                            <ui:SimpleStackPanel Margin="12,0,0,0" VerticalAlignment="Center">
+                                <TextBlock FontSize="14" Text="{x:Static resx:Resources.OverlayPage_Size}" />
+                                <TextBlock
+                                    FontSize="12"
+                                    Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                    Text="{x:Static resx:Resources.OverlayPage_SizeDesc}"
+                                    TextWrapping="Wrap" />
                             </ui:SimpleStackPanel>
                         </DockPanel>
 
                         <DockPanel Grid.Column="1" Margin="12,0,0,0">
-                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Value, StringFormat=N0, ElementName=SliderControllerSize, Mode=OneWay}" />
-                            <Slider Margin="6,0,0,0" Name="SliderControllerSize" Grid.Column="3" VerticalAlignment="Center" AutoToolTipPlacement="TopLeft" LargeChange="100" Maximum="800" Minimum="200" Value="400" TickPlacement="BottomRight" SmallChange="50" TickFrequency="50" ValueChanged="SliderControllerSize_ValueChanged"  IsSnapToTickEnabled="True"
-                            MouseEnter="Scrolllock_MouseEnter"
-                            MouseLeave="Scrolllock_MouseLeave"/>
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Text="{Binding Value, StringFormat=N0, ElementName=SliderControllerSize, Mode=OneWay}" />
+                            <Slider
+                                Name="SliderControllerSize"
+                                Grid.Column="3"
+                                Margin="6,0,0,0"
+                                VerticalAlignment="Center"
+                                AutoToolTipPlacement="TopLeft"
+                                IsSnapToTickEnabled="True"
+                                LargeChange="100"
+                                Maximum="800"
+                                Minimum="200"
+                                MouseEnter="Scrolllock_MouseEnter"
+                                MouseLeave="Scrolllock_MouseLeave"
+                                SmallChange="50"
+                                TickFrequency="50"
+                                TickPlacement="BottomRight"
+                                ValueChanged="SliderControllerSize_ValueChanged"
+                                Value="400" />
                         </DockPanel>
                     </Grid>
                 </Border>
 
-                <!-- Trigger -->
-                <Border                      
-                            Padding="15,12,12,12"
-                            CornerRadius="{DynamicResource ControlCornerRadius}"
-                            Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}">
+                <!--  Trigger  -->
+                <Border
+                    Padding="15,12,12,12"
+                    Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                    CornerRadius="{DynamicResource ControlCornerRadius}">
 
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="5*" MinWidth="200"></ColumnDefinition>
-                            <ColumnDefinition Width="3*" MinWidth="120"></ColumnDefinition>
+                            <ColumnDefinition Width="5*" MinWidth="200" />
+                            <ColumnDefinition Width="3*" MinWidth="120" />
                         </Grid.ColumnDefinitions>
 
                         <DockPanel>
-                            <ui:FontIcon FontFamily="{DynamicResource SymbolThemeFontFamily}" Glyph="&#xE7FC;" Height="40" HorizontalAlignment="Center"/>
+                            <ui:FontIcon
+                                Height="40"
+                                HorizontalAlignment="Center"
+                                FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                                Glyph="&#xE7FC;" />
 
-                            <ui:SimpleStackPanel VerticalAlignment="Center" Margin="12,0,0,0">
-                                <TextBlock Text="{x:Static resx:Resources.OverlayPage_SecondaryTrigger}" FontSize="14"/>
-                                <TextBlock Text="{x:Static resx:Resources.OverlayPage_SecondaryTriggerDesc}" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" FontSize="12" TextWrapping="Wrap"/>
+                            <ui:SimpleStackPanel Margin="12,0,0,0" VerticalAlignment="Center">
+                                <TextBlock FontSize="14" Text="{x:Static resx:Resources.OverlayPage_SecondaryTrigger}" />
+                                <TextBlock
+                                    FontSize="12"
+                                    Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                    Text="{x:Static resx:Resources.OverlayPage_SecondaryTriggerDesc}"
+                                    TextWrapping="Wrap" />
                             </ui:SimpleStackPanel>
                         </DockPanel>
 
-                        <Button Name="ControllerTriggerButton" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Click="ControllerTriggerButton_Click">
-                            <ui:SimpleStackPanel Name="ControllerTriggerStack" Spacing="6" Orientation="Horizontal" VerticalAlignment="Center">
-                                <ui:FontIcon Name="ControllerTriggerIcon"/>
-                                <TextBlock Name="ControllerTriggerText"/>
+                        <Button
+                            Name="ControllerTriggerButton"
+                            Grid.Column="1"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Click="ControllerTriggerButton_Click">
+                            <ui:SimpleStackPanel
+                                Name="ControllerTriggerStack"
+                                VerticalAlignment="Center"
+                                Orientation="Horizontal"
+                                Spacing="6">
+                                <ui:FontIcon Name="ControllerTriggerIcon" />
+                                <TextBlock Name="ControllerTriggerText" />
                             </ui:SimpleStackPanel>
                         </Button>
                     </Grid>
                 </Border>
 
-                <!-- Model settings -->
-                <Expander Expanded="Expander_Expanded" HorizontalAlignment="Stretch">
+                <!--  Model settings  -->
+                <Expander HorizontalAlignment="Stretch" Expanded="Expander_Expanded">
                     <Expander.Header>
                         <DockPanel Margin="0,12,12,12">
-                            <ui:FontIcon FontFamily="{DynamicResource SymbolThemeFontFamily}" Glyph="&#xE8B4;" Height="40" HorizontalAlignment="Center"/>
+                            <ui:FontIcon
+                                Height="40"
+                                HorizontalAlignment="Center"
+                                FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                                Glyph="&#xE8B4;" />
 
                             <ui:SimpleStackPanel Margin="12,0,0,0" VerticalAlignment="Center">
-                                <TextBlock Text="{x:Static resx:Resources.OverlayPage_RenderSettings}" FontSize="14"/>
-                                <TextBlock Text="{x:Static resx:Resources.OverlayPage_RenderSettingsDesc}" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" FontSize="12" TextWrapping="Wrap"/>
+                                <TextBlock FontSize="14" Text="{x:Static resx:Resources.OverlayPage_RenderSettings}" />
+                                <TextBlock
+                                    FontSize="12"
+                                    Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                    Text="{x:Static resx:Resources.OverlayPage_RenderSettingsDesc}"
+                                    TextWrapping="Wrap" />
                             </ui:SimpleStackPanel>
                         </DockPanel>
                     </Expander.Header>
 
                     <Expander.Content>
-                        <ui:SimpleStackPanel Spacing="12" Margin="30,0,0,0">
+                        <ui:SimpleStackPanel Margin="30,0,0,0" Spacing="12">
 
-                            <!-- Framerate -->
+                            <!--  Framerate  -->
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="5*" MinWidth="200"></ColumnDefinition>
-                                    <ColumnDefinition Width="3*" MinWidth="120"></ColumnDefinition>
+                                    <ColumnDefinition Width="5*" MinWidth="200" />
+                                    <ColumnDefinition Width="3*" MinWidth="120" />
                                 </Grid.ColumnDefinitions>
 
-                                <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                                    <TextBlock Text="{x:Static resx:Resources.OverlayPage_RenderSettingsFramerate}" FontSize="14"/>
-                                    <TextBlock Text="{x:Static resx:Resources.OverlayPage_RenderSettingsFramerateDesc}" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" FontSize="12" TextWrapping="Wrap"/>
+                                <StackPanel VerticalAlignment="Center" Orientation="Vertical">
+                                    <TextBlock FontSize="14" Text="{x:Static resx:Resources.OverlayPage_RenderSettingsFramerate}" />
+                                    <TextBlock
+                                        FontSize="12"
+                                        Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                        Text="{x:Static resx:Resources.OverlayPage_RenderSettingsFramerateDesc}"
+                                        TextWrapping="Wrap" />
                                 </StackPanel>
 
                                 <DockPanel Grid.Column="1" Margin="12,0,0,0">
-                                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Value, StringFormat=N0, ElementName=Slider_Framerate, Mode=OneWay}" />
-                                    <Slider Margin="6,0,0,0" Name="Slider_Framerate" VerticalAlignment="Center" AutoToolTipPlacement="TopLeft" Maximum="60" TickFrequency="5" TickPlacement="BottomRight" Minimum="10" IsSnapToTickEnabled="True"
-									MouseEnter="Scrolllock_MouseEnter"
-									MouseLeave="Scrolllock_MouseLeave" LargeChange="10" SmallChange="5" ValueChanged="Slider_Framerate_ValueChanged"/>
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding Value, StringFormat=N0, ElementName=Slider_Framerate, Mode=OneWay}" />
+                                    <Slider
+                                        Name="Slider_Framerate"
+                                        Margin="6,0,0,0"
+                                        VerticalAlignment="Center"
+                                        AutoToolTipPlacement="TopLeft"
+                                        IsSnapToTickEnabled="True"
+                                        LargeChange="10"
+                                        Maximum="60"
+                                        Minimum="10"
+                                        MouseEnter="Scrolllock_MouseEnter"
+                                        MouseLeave="Scrolllock_MouseLeave"
+                                        SmallChange="5"
+                                        TickFrequency="5"
+                                        TickPlacement="BottomRight"
+                                        ValueChanged="Slider_Framerate_ValueChanged" />
                                 </DockPanel>
                             </Grid>
 
-                            <!-- Separator -->
-                            <Separator BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="0 1 0 0" Margin="-60,0,-60,0" />
+                            <!--  Separator  -->
+                            <Separator
+                                Margin="-60,0,-60,0"
+                                BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                                BorderThickness="0,1,0,0" />
 
-                            <!-- Anti-Aliasing -->
+                            <!--  Anti-Aliasing  -->
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="5*" MinWidth="200"></ColumnDefinition>
-                                    <ColumnDefinition Width="3*" MinWidth="120"></ColumnDefinition>
+                                    <ColumnDefinition Width="5*" MinWidth="200" />
+                                    <ColumnDefinition Width="3*" MinWidth="120" />
                                 </Grid.ColumnDefinitions>
 
-                                <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                                    <TextBlock Text="{x:Static resx:Resources.OverlayPage_RenderSettingsAntialiasing}" FontSize="14"/>
-                                    <TextBlock Text="{x:Static resx:Resources.OverlayPage_RenderSettingsAntialiasingDesc}" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" FontSize="12" TextWrapping="Wrap"/>
+                                <StackPanel VerticalAlignment="Center" Orientation="Vertical">
+                                    <TextBlock FontSize="14" Text="{x:Static resx:Resources.OverlayPage_RenderSettingsAntialiasing}" />
+                                    <TextBlock
+                                        FontSize="12"
+                                        Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                        Text="{x:Static resx:Resources.OverlayPage_RenderSettingsAntialiasingDesc}"
+                                        TextWrapping="Wrap" />
                                 </StackPanel>
 
                                 <DockPanel Grid.Column="1" Margin="12,0,0,0">
-                                    <ui:ToggleSwitch Name="Toggle_RenderAA" Grid.Column="1" Width="40" HorizontalAlignment="Right" Toggled="Toggle_RenderAA_Toggled" IsOn="False">
-                                    </ui:ToggleSwitch>
+                                    <ui:ToggleSwitch
+                                        Name="Toggle_RenderAA"
+                                        Grid.Column="1"
+                                        Width="40"
+                                        HorizontalAlignment="Right"
+                                        IsOn="False"
+                                        Toggled="Toggle_RenderAA_Toggled" />
                                 </DockPanel>
                             </Grid>
                         </ui:SimpleStackPanel>
                     </Expander.Content>
                 </Expander>
 
-                <!-- Resting angles -->
-                <Expander Expanded="Expander_Expanded" HorizontalAlignment="Stretch">
+                <!--  Resting angles  -->
+                <Expander HorizontalAlignment="Stretch" Expanded="Expander_Expanded">
                     <Expander.Header>
                         <DockPanel Margin="0,12,12,12">
-                            <ui:FontIcon FontFamily="{DynamicResource SymbolThemeFontFamily}" Glyph="&#xF617;" Height="40" HorizontalAlignment="Center"/>
+                            <ui:FontIcon
+                                Height="40"
+                                HorizontalAlignment="Center"
+                                FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                                Glyph="&#xF617;" />
 
                             <ui:SimpleStackPanel Margin="12,0,0,0" VerticalAlignment="Center">
-                                <TextBlock Text="{x:Static resx:Resources.OverlayPage_CameraAngle}" FontSize="14"/>
-                                <TextBlock Text="{x:Static resx:Resources.OverlayPage_CameraAngleDesc}" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" FontSize="12" TextWrapping="Wrap"/>
+                                <TextBlock FontSize="14" Text="{x:Static resx:Resources.OverlayPage_CameraAngle}" />
+                                <TextBlock
+                                    FontSize="12"
+                                    Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                    Text="{x:Static resx:Resources.OverlayPage_CameraAngleDesc}"
+                                    TextWrapping="Wrap" />
                             </ui:SimpleStackPanel>
                         </DockPanel>
                     </Expander.Header>
 
                     <Expander.Content>
-                        <ui:SimpleStackPanel Spacing="12" Margin="30,0,0,0">
+                        <ui:SimpleStackPanel Margin="30,0,0,0" Spacing="12">
 
-                            <!-- Face camera -->
-                            
+                            <!--  Face camera  -->
+
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="5*" MinWidth="200"></ColumnDefinition>
-                                    <ColumnDefinition Width="3*" MinWidth="120"></ColumnDefinition>
+                                    <ColumnDefinition Width="5*" MinWidth="200" />
+                                    <ColumnDefinition Width="3*" MinWidth="120" />
                                 </Grid.ColumnDefinitions>
 
-                                <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                                    <TextBlock Text="{x:Static resx:Resources.OverlayPage_FaceCamera}" FontSize="14"/>
-                                    <TextBlock Text="{x:Static resx:Resources.OverlayPage_FaceCameraDesc}" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" FontSize="12" TextWrapping="Wrap"/>
+                                <StackPanel VerticalAlignment="Center" Orientation="Vertical">
+                                    <TextBlock FontSize="14" Text="{x:Static resx:Resources.OverlayPage_FaceCamera}" />
+                                    <TextBlock
+                                        FontSize="12"
+                                        Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                        Text="{x:Static resx:Resources.OverlayPage_FaceCameraDesc}"
+                                        TextWrapping="Wrap" />
                                 </StackPanel>
 
-                                
 
-                                <ui:ToggleSwitch Grid.Column="1" Width="40" HorizontalAlignment="Right" Name="Toggle_FaceCamera" Toggled="Toggle_FaceCamera_Toggled"/>
+
+                                <ui:ToggleSwitch
+                                    Name="Toggle_FaceCamera"
+                                    Grid.Column="1"
+                                    Width="40"
+                                    HorizontalAlignment="Right"
+                                    Toggled="Toggle_FaceCamera_Toggled" />
                             </Grid>
 
-                            <!-- Separator -->
-                            <Separator BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="0 1 0 0" Margin="-60,0,-60,0" />
+                            <!--  Separator  -->
+                            <Separator
+                                Margin="-60,0,-60,0"
+                                BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                                BorderThickness="0,1,0,0" />
 
 
-                            <!-- Resting pitch -->
+                            <!--  Resting pitch  -->
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="5*" MinWidth="200"></ColumnDefinition>
-                                    <ColumnDefinition Width="3*" MinWidth="120"></ColumnDefinition>
+                                    <ColumnDefinition Width="5*" MinWidth="200" />
+                                    <ColumnDefinition Width="3*" MinWidth="120" />
                                 </Grid.ColumnDefinitions>
 
-                                <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                                    <TextBlock Text="{x:Static resx:Resources.OverlayPage_CameraAnglePitch}" FontSize="14"/>
-                                    <TextBlock Text="{x:Static resx:Resources.OverlayPage_CameraAnglePitchDesc}" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" FontSize="12" TextWrapping="Wrap"/>
+                                <StackPanel VerticalAlignment="Center" Orientation="Vertical">
+                                    <TextBlock FontSize="14" Text="{x:Static resx:Resources.OverlayPage_CameraAnglePitch}" />
+                                    <TextBlock
+                                        FontSize="12"
+                                        Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                        Text="{x:Static resx:Resources.OverlayPage_CameraAnglePitchDesc}"
+                                        TextWrapping="Wrap" />
                                 </StackPanel>
 
                                 <DockPanel Grid.Column="1" Margin="12,0,0,0">
-                                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Value, StringFormat=N1, ElementName=Slider_RestingPitch, Mode=OneWay}" />
-                                    <Slider Margin="6,0,0,0" Name="Slider_RestingPitch" VerticalAlignment="Center" AutoToolTipPlacement="TopLeft" Maximum="90" TickFrequency="5" TickPlacement="BottomRight" Minimum="0" AutoToolTipPrecision="1" IsSnapToTickEnabled="True"
-									MouseEnter="Scrolllock_MouseEnter"
-									MouseLeave="Scrolllock_MouseLeave" LargeChange="10" SmallChange="5" ValueChanged="Slider_RestingPitch_ValueChanged" IsEnabled="False"/>
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding Value, StringFormat=N1, ElementName=Slider_RestingPitch, Mode=OneWay}" />
+                                    <Slider
+                                        Name="Slider_RestingPitch"
+                                        Margin="6,0,0,0"
+                                        VerticalAlignment="Center"
+                                        AutoToolTipPlacement="TopLeft"
+                                        AutoToolTipPrecision="1"
+                                        IsEnabled="False"
+                                        IsSnapToTickEnabled="True"
+                                        LargeChange="10"
+                                        Maximum="90"
+                                        Minimum="0"
+                                        MouseEnter="Scrolllock_MouseEnter"
+                                        MouseLeave="Scrolllock_MouseLeave"
+                                        SmallChange="5"
+                                        TickFrequency="5"
+                                        TickPlacement="BottomRight"
+                                        ValueChanged="Slider_RestingPitch_ValueChanged" />
                                 </DockPanel>
                             </Grid>
-     
+
                         </ui:SimpleStackPanel>
                     </Expander.Content>
                 </Expander>
-            </ui:SimpleStackPanel>
+            </controls:SettingsGroup>
 
-            <!-- Trackpads options -->
-            <ui:SimpleStackPanel Spacing="6">
-                <Label Content="{x:Static resx:Resources.OverlayPage_TrackpadsOptions}" FontWeight="SemiBold"></Label>
+            <!--  Trackpads options  -->
+            <controls:SettingsGroup Header="{x:Static resx:Resources.OverlayPage_TrackpadsOptions}">
 
-                <!-- Controller Alignment -->
-                <Border                      
-                        Padding="15,12,12,12"
-                        CornerRadius="{DynamicResource ControlCornerRadius}"
-                        Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}">
+                <!--  Controller Alignment  -->
+                <Border
+                    Padding="15,12,12,12"
+                    Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                    CornerRadius="{DynamicResource ControlCornerRadius}">
 
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="5*" MinWidth="200"></ColumnDefinition>
-                            <ColumnDefinition Width="3*" MinWidth="120"></ColumnDefinition>
+                            <ColumnDefinition Width="5*" MinWidth="200" />
+                            <ColumnDefinition Width="3*" MinWidth="120" />
                         </Grid.ColumnDefinitions>
 
                         <DockPanel>
-                            <ui:FontIcon FontFamily="{DynamicResource SymbolThemeFontFamily}" Glyph="&#xE80A;" Height="40" HorizontalAlignment="Center"/>
+                            <ui:FontIcon
+                                Height="40"
+                                HorizontalAlignment="Center"
+                                FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                                Glyph="&#xE80A;" />
 
-                            <ui:SimpleStackPanel VerticalAlignment="Center" Margin="12,0,0,0">
-                                <TextBlock Text="{x:Static resx:Resources.OverlayPage_Alignment}" FontSize="14"/>
-                                <TextBlock Text="{x:Static resx:Resources.OverlayPage_AlignmentTrackpadDesc}" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" FontSize="12" TextWrapping="Wrap"/>
+                            <ui:SimpleStackPanel Margin="12,0,0,0" VerticalAlignment="Center">
+                                <TextBlock FontSize="14" Text="{x:Static resx:Resources.OverlayPage_Alignment}" />
+                                <TextBlock
+                                    FontSize="12"
+                                    Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                    Text="{x:Static resx:Resources.OverlayPage_AlignmentTrackpadDesc}"
+                                    TextWrapping="Wrap" />
                             </ui:SimpleStackPanel>
                         </DockPanel>
 
                         <Grid Grid.Column="1">
-                            <ui:SimpleStackPanel Name="OverlayTrackpadsAlignment" Spacing="6" HorizontalAlignment="Right">
-                                <Button Tag="0" Width="50" Height="50" Click="TrackpadsAlignment_Click"></Button>
-                                <Button Tag="1" Width="50" Height="50" Click="TrackpadsAlignment_Click"></Button>
-                                <Button Tag="2" Width="50" Height="50" Click="TrackpadsAlignment_Click"></Button>
+                            <ui:SimpleStackPanel
+                                Name="OverlayTrackpadsAlignment"
+                                HorizontalAlignment="Right"
+                                Spacing="6">
+                                <Button
+                                    Width="50"
+                                    Height="50"
+                                    Click="TrackpadsAlignment_Click"
+                                    Tag="0" />
+                                <Button
+                                    Width="50"
+                                    Height="50"
+                                    Click="TrackpadsAlignment_Click"
+                                    Tag="1" />
+                                <Button
+                                    Width="50"
+                                    Height="50"
+                                    Click="TrackpadsAlignment_Click"
+                                    Tag="2" />
                             </ui:SimpleStackPanel>
                         </Grid>
                     </Grid>
                 </Border>
 
-                <!-- Size -->
-                <Border                      
-                        Padding="15,12,12,12"
-                        CornerRadius="{DynamicResource ControlCornerRadius}"
-                        Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}">
+                <!--  Size  -->
+                <Border
+                    Padding="15,12,12,12"
+                    Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                    CornerRadius="{DynamicResource ControlCornerRadius}">
 
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="5*" MinWidth="200"></ColumnDefinition>
-                            <ColumnDefinition Width="3*" MinWidth="120"></ColumnDefinition>
+                            <ColumnDefinition Width="5*" MinWidth="200" />
+                            <ColumnDefinition Width="3*" MinWidth="120" />
                         </Grid.ColumnDefinitions>
 
                         <DockPanel>
-                            <ui:FontIcon FontFamily="{DynamicResource SymbolThemeFontFamily}" Glyph="&#xECC6;" Height="40" HorizontalAlignment="Center"/>
+                            <ui:FontIcon
+                                Height="40"
+                                HorizontalAlignment="Center"
+                                FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                                Glyph="&#xECC6;" />
 
-                            <ui:SimpleStackPanel VerticalAlignment="Center" Margin="12,0,0,0">
-                                <TextBlock Text="{x:Static resx:Resources.OverlayPage_Size}" FontSize="14"/>
-                                <TextBlock Text="{x:Static resx:Resources.OverlayPage_SizeOverlayDesc}" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" FontSize="12" TextWrapping="Wrap"/>
+                            <ui:SimpleStackPanel Margin="12,0,0,0" VerticalAlignment="Center">
+                                <TextBlock FontSize="14" Text="{x:Static resx:Resources.OverlayPage_Size}" />
+                                <TextBlock
+                                    FontSize="12"
+                                    Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                    Text="{x:Static resx:Resources.OverlayPage_SizeOverlayDesc}"
+                                    TextWrapping="Wrap" />
                             </ui:SimpleStackPanel>
                         </DockPanel>
 
                         <DockPanel Grid.Column="1" Margin="12,0,0,0">
-                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Value, StringFormat=N0, ElementName=SliderTrackpadsSize, Mode=OneWay}" />
-                            <Slider Margin="6,0,0,0" Name="SliderTrackpadsSize" Grid.Column="3" VerticalAlignment="Center" AutoToolTipPlacement="TopLeft" LargeChange="100" Maximum="800" Minimum="100" Value="250" TickPlacement="BottomRight" SmallChange="50" TickFrequency="50" ValueChanged="SliderTrackpadsSize_ValueChanged"  IsSnapToTickEnabled="True"
-                            MouseEnter="Scrolllock_MouseEnter"
-                            MouseLeave="Scrolllock_MouseLeave"/>
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Text="{Binding Value, StringFormat=N0, ElementName=SliderTrackpadsSize, Mode=OneWay}" />
+                            <Slider
+                                Name="SliderTrackpadsSize"
+                                Grid.Column="3"
+                                Margin="6,0,0,0"
+                                VerticalAlignment="Center"
+                                AutoToolTipPlacement="TopLeft"
+                                IsSnapToTickEnabled="True"
+                                LargeChange="100"
+                                Maximum="800"
+                                Minimum="100"
+                                MouseEnter="Scrolllock_MouseEnter"
+                                MouseLeave="Scrolllock_MouseLeave"
+                                SmallChange="50"
+                                TickFrequency="50"
+                                TickPlacement="BottomRight"
+                                ValueChanged="SliderTrackpadsSize_ValueChanged"
+                                Value="250" />
                         </DockPanel>
                     </Grid>
                 </Border>
 
-                <!-- Opacity -->
-                <Border                      
-                        Padding="15,12,12,12"
-                        CornerRadius="{DynamicResource ControlCornerRadius}"
-                        Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}">
+                <!--  Opacity  -->
+                <Border
+                    Padding="15,12,12,12"
+                    Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                    CornerRadius="{DynamicResource ControlCornerRadius}">
 
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="5*" MinWidth="200"></ColumnDefinition>
-                            <ColumnDefinition Width="3*" MinWidth="120"></ColumnDefinition>
+                            <ColumnDefinition Width="5*" MinWidth="200" />
+                            <ColumnDefinition Width="3*" MinWidth="120" />
                         </Grid.ColumnDefinitions>
 
                         <DockPanel>
-                            <ui:FontIcon FontFamily="{DynamicResource SymbolThemeFontFamily}" Glyph="&#xE75C;" Height="40" HorizontalAlignment="Center"/>
+                            <ui:FontIcon
+                                Height="40"
+                                HorizontalAlignment="Center"
+                                FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                                Glyph="&#xE75C;" />
 
-                            <ui:SimpleStackPanel VerticalAlignment="Center" Margin="12,0,0,0">
-                                <TextBlock Text="{x:Static resx:Resources.OverlayPage_Opacity}" FontSize="14"/>
-                                <TextBlock Text="{x:Static resx:Resources.OverlayPage_OpacityTrackpadDesc}" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" FontSize="12" TextWrapping="Wrap"/>
+                            <ui:SimpleStackPanel Margin="12,0,0,0" VerticalAlignment="Center">
+                                <TextBlock FontSize="14" Text="{x:Static resx:Resources.OverlayPage_Opacity}" />
+                                <TextBlock
+                                    FontSize="12"
+                                    Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                    Text="{x:Static resx:Resources.OverlayPage_OpacityTrackpadDesc}"
+                                    TextWrapping="Wrap" />
                             </ui:SimpleStackPanel>
                         </DockPanel>
 
                         <DockPanel Grid.Column="1" Margin="12,0,0,0">
-                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Value, StringFormat=N2, ElementName=SliderTrackpadsOpacity, Mode=OneWay}" />
-                            <Slider Margin="6,0,0,0" Name="SliderTrackpadsOpacity" VerticalAlignment="Center" AutoToolTipPlacement="TopLeft" LargeChange="0.1" Maximum="0.25" Minimum="0.01" Value="0.2" TickPlacement="BottomRight" SmallChange="0.01" TickFrequency="0.01" AutoToolTipPrecision="1" ValueChanged="SliderTrackpadsOpacity_ValueChanged" IsSnapToTickEnabled="True"
-                            MouseEnter="Scrolllock_MouseEnter"
-                            MouseLeave="Scrolllock_MouseLeave"/>
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Text="{Binding Value, StringFormat=N2, ElementName=SliderTrackpadsOpacity, Mode=OneWay}" />
+                            <Slider
+                                Name="SliderTrackpadsOpacity"
+                                Margin="6,0,0,0"
+                                VerticalAlignment="Center"
+                                AutoToolTipPlacement="TopLeft"
+                                AutoToolTipPrecision="1"
+                                IsSnapToTickEnabled="True"
+                                LargeChange="0.1"
+                                Maximum="0.25"
+                                Minimum="0.01"
+                                MouseEnter="Scrolllock_MouseEnter"
+                                MouseLeave="Scrolllock_MouseLeave"
+                                SmallChange="0.01"
+                                TickFrequency="0.01"
+                                TickPlacement="BottomRight"
+                                ValueChanged="SliderTrackpadsOpacity_ValueChanged"
+                                Value="0.2" />
                         </DockPanel>
                     </Grid>
                 </Border>
 
-                <!-- Trigger -->
-                <Border                      
-                            Padding="15,12,12,12"
-                            CornerRadius="{DynamicResource ControlCornerRadius}"
-                            Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}">
+                <!--  Trigger  -->
+                <Border
+                    Padding="15,12,12,12"
+                    Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                    CornerRadius="{DynamicResource ControlCornerRadius}">
 
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="5*" MinWidth="200"></ColumnDefinition>
-                            <ColumnDefinition Width="3*" MinWidth="120"></ColumnDefinition>
+                            <ColumnDefinition Width="5*" MinWidth="200" />
+                            <ColumnDefinition Width="3*" MinWidth="120" />
                         </Grid.ColumnDefinitions>
 
                         <DockPanel>
-                            <ui:FontIcon FontFamily="{DynamicResource SymbolThemeFontFamily}" Glyph="&#xE7FC;" Height="40" HorizontalAlignment="Center"/>
+                            <ui:FontIcon
+                                Height="40"
+                                HorizontalAlignment="Center"
+                                FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                                Glyph="&#xE7FC;" />
 
-                            <ui:SimpleStackPanel VerticalAlignment="Center" Margin="12,0,0,0">
-                                <TextBlock Text="{x:Static resx:Resources.OverlayPage_SecondaryTrigger}" FontSize="14"/>
-                                <TextBlock Text="{x:Static resx:Resources.OverlayPage_SecondaryTriggerOverlayDesc}" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" FontSize="12" TextWrapping="Wrap"/>
+                            <ui:SimpleStackPanel Margin="12,0,0,0" VerticalAlignment="Center">
+                                <TextBlock FontSize="14" Text="{x:Static resx:Resources.OverlayPage_SecondaryTrigger}" />
+                                <TextBlock
+                                    FontSize="12"
+                                    Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                    Text="{x:Static resx:Resources.OverlayPage_SecondaryTriggerOverlayDesc}"
+                                    TextWrapping="Wrap" />
                             </ui:SimpleStackPanel>
                         </DockPanel>
 
-                        <Button Name="TrackpadsTriggerButton" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Click="TrackpadsTriggerButton_Click">
-                            <ui:SimpleStackPanel Name="TrackpadsTriggerStack" Spacing="6" Orientation="Horizontal" VerticalAlignment="Center">
-                                <ui:FontIcon Name="TrackpadsTriggerIcon"/>
-                                <TextBlock Name="TrackpadsTriggerText"/>
+                        <Button
+                            Name="TrackpadsTriggerButton"
+                            Grid.Column="1"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Click="TrackpadsTriggerButton_Click">
+                            <ui:SimpleStackPanel
+                                Name="TrackpadsTriggerStack"
+                                VerticalAlignment="Center"
+                                Orientation="Horizontal"
+                                Spacing="6">
+                                <ui:FontIcon Name="TrackpadsTriggerIcon" />
+                                <TextBlock Name="TrackpadsTriggerText" />
                             </ui:SimpleStackPanel>
                         </Button>
                     </Grid>
                 </Border>
-            </ui:SimpleStackPanel>
-        </ui:SimpleStackPanel>
+
+            </controls:SettingsGroup>
+        </StackPanel>
     </Grid>
 </Page>

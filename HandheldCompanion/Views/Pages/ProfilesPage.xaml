@@ -1,421 +1,645 @@
-<Page x:Class="HandheldCompanion.Views.Pages.ProfilesPage"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:ui="http://schemas.modernwpf.com/2019"
-      xmlns:local="clr-namespace:HandheldCompanion" 
-      xmlns:pages="clr-namespace:HandheldCompanion.Views.Pages"
-      xmlns:resx="clr-namespace:HandheldCompanion.Properties"
-      mc:Ignorable="d" 
-      d:DesignHeight="2000" d:DesignWidth="1000"
-      KeepAlive="True"
-      Loaded="Page_Loaded"
-      Title="{x:Static resx:Resources.ProfilesPage_Profiles}">
+<Page
+    x:Class="HandheldCompanion.Views.Pages.ProfilesPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:HandheldCompanion.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:HandheldCompanion"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:pages="clr-namespace:HandheldCompanion.Views.Pages"
+    xmlns:resx="clr-namespace:HandheldCompanion.Properties"
+    xmlns:ui="http://schemas.modernwpf.com/2019"
+    Title="{x:Static resx:Resources.ProfilesPage_Profiles}"
+    d:DesignHeight="2000"
+    d:DesignWidth="1000"
+    KeepAlive="True"
+    Loaded="Page_Loaded"
+    mc:Ignorable="d">
 
-    <Grid Name="MainGrid" Margin="20" >
-        <Border>
-            <ui:SimpleStackPanel Name="StackPanel_Profiles" Spacing="24">
-                <ui:SimpleStackPanel Spacing="6">
+    <Grid Name="MainGrid" Margin="56,20,12,36">
+        <ui:SimpleStackPanel Name="StackPanel_Profiles">
+            <controls:SettingsGroup Margin="0,-32,0,0">
 
-                    <!-- Profile picker -->
-                    <Border
-                    Padding="15,12,12,12"
-                    CornerRadius="{DynamicResource ControlCornerRadius}"
-                    Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}">
-
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="3*" MinWidth="120"></ColumnDefinition>
-                                <ColumnDefinition Width="5*" MinWidth="200"></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
-
-                            <DockPanel>
-                                <ui:FontIcon Name="ProfileIcon" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}" FontFamily="{DynamicResource SymbolThemeFontFamily}" Glyph="&#xE748;" HorizontalAlignment="Center"/>
-
-                                <ui:SimpleStackPanel VerticalAlignment="Center" Margin="12,0,0,0">
-                                    <TextBlock Text="{x:Static resx:Resources.ProfilesPage_ProfileSelection}" FontSize="14"/>
-                                    <TextBlock Text="{x:Static resx:Resources.ProfilesPage_ProfileSelectionDesc}" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" FontSize="12" TextWrapping="Wrap"/>
+                <!--  Profile picker  -->
+                <controls:Setting
+                    Description="{x:Static resx:Resources.ProfilesPage_ProfileSelectionDesc}"
+                    Header="{x:Static resx:Resources.ProfilesPage_ProfileSelection}"
+                    Icon="&#xE748;">
+                    <controls:Setting.ActionContent>
+                        <ui:SimpleStackPanel Margin="12,0,0,0" Spacing="6">
+                            <ComboBox
+                                Name="cB_Profiles"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Center"
+                                BorderThickness="0"
+                                SelectionChanged="cB_Profiles_SelectionChanged" />
+                            <!--  Create new profile  -->
+                            <Button Click="b_CreateProfile_Click" Style="{DynamicResource AccentButtonStyle}">
+                                <ui:SimpleStackPanel
+                                    HorizontalAlignment="Center"
+                                    Orientation="Horizontal"
+                                    Spacing="12">
+                                    <ui:FontIcon
+                                        Grid.Column="2"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                                        Glyph="&#xE8E5;" />
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        FontSize="14"
+                                        Text="{x:Static resx:Resources.ProfilesPage_CreateNewProfile}" />
                                 </ui:SimpleStackPanel>
-                            </DockPanel>
-
-                            <ui:SimpleStackPanel Grid.Column="1" Margin="12,0,0,0" Spacing="6">
-                                <ComboBox SelectionChanged="cB_Profiles_SelectionChanged" Name="cB_Profiles" HorizontalAlignment="Stretch" VerticalAlignment="Center" BorderThickness="0"/>
-                                <!-- Create new profile -->
-                                <Button Click="b_CreateProfile_Click" Style="{DynamicResource AccentButtonStyle}">
-                                    <ui:SimpleStackPanel HorizontalAlignment="Center" Orientation="Horizontal" Spacing="12">
-                                        <ui:FontIcon FontFamily="{DynamicResource SymbolThemeFontFamily}" Glyph="&#xE8E5;" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                        <TextBlock Text="{x:Static resx:Resources.ProfilesPage_CreateNewProfile}" FontSize="14" VerticalAlignment="Center"/>
-                                    </ui:SimpleStackPanel>
-                                </Button>
-                            </ui:SimpleStackPanel>
-                        </Grid>
-                    </Border>
-
-                    <!-- Warning -->
-                    <Border
-                        Name="WarningBorder"
-                        Visibility="Collapsed"
-                        Background="{DynamicResource SystemControlHighlightAltListAccentLowBrush}"
-                        Padding="12,12,12,12"
-                        CornerRadius="{DynamicResource ControlCornerRadius}"
-                        ui:ThemeManager.RequestedTheme="{Binding Source={x:Static ui:ThemeManager.Current}, Path=ActualApplicationTheme, Converter={StaticResource InverseAppThemeConverter}}">
-
-                        <Grid>
-                            <ui:SimpleStackPanel HorizontalAlignment="Stretch" Spacing="12" Grid.Column="0">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="0.5*" MinWidth="80"></ColumnDefinition>
-                                        <ColumnDefinition Width="9.5*"></ColumnDefinition>
-                                    </Grid.ColumnDefinitions>
-
-                                    <Grid>
-                                        <ui:FontIcon Foreground="White" FontFamily="{DynamicResource SymbolThemeFontFamily}" Glyph="&#xF136;" />
-                                        <ui:FontIcon Foreground="Black" FontFamily="{DynamicResource SymbolThemeFontFamily}" Glyph="&#xF13C;" />
-                                    </Grid>
-                                    <TextBlock Name="WarningContent" TextWrapping="Wrap" Grid.Column="1" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
-                                </Grid>
-                            </ui:SimpleStackPanel>
-                        </Grid>
-                    </Border>
-                </ui:SimpleStackPanel>
-
-                <ui:SimpleStackPanel Spacing="6" Name="GlobalDetails" IsEnabled="False" >
-                    <Label Content="{x:Static resx:Resources.ProfilesPage_ProfileDetails}" FontWeight="SemiBold"></Label>
-
-                    <!-- Profile details -->
-                    <Border
-                        Background="{DynamicResource SystemControlPageBackgroundAltHighBrush}"
-                        Padding="15,12,12,12"
-                        CornerRadius="{DynamicResource ControlCornerRadius}"
-                        ui:ThemeManager.RequestedTheme="{Binding Source={x:Static ui:ThemeManager.Current}, Path=ActualApplicationTheme, Converter={StaticResource InverseAppThemeConverter}}">
-
-                        <ui:SimpleStackPanel Spacing="6">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="3*" MinWidth="120"></ColumnDefinition>
-                                    <ColumnDefinition Width="5*" MinWidth="200"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-
-                                <DockPanel>
-                                    <ui:FontIcon Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}" FontFamily="{DynamicResource SymbolThemeFontFamily}" Glyph="&#xE8AC;" Height="40"/>
-                                    <TextBlock Margin="12,0,0,0" VerticalAlignment="Center" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}" Text="{x:Static resx:Resources.ProfilesPage_ProfileName}" FontSize="14"/>
-                                </DockPanel>
-
-                                <DockPanel Grid.Column="1" Margin="12,0,0,0">
-                                    <TextBox Name="tB_ProfileName" Grid.Column="1"
-                                         Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
-                                         VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
-                                </DockPanel>
-                            </Grid>
-
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="3*" MinWidth="120"></ColumnDefinition>
-                                    <ColumnDefinition Width="5*" MinWidth="200"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-
-                                <DockPanel>
-                                    <ui:FontIcon Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}" FontFamily="{DynamicResource SymbolThemeFontFamily}" Glyph="&#xED25;" Height="40"/>
-                                    <TextBlock Margin="12,0,0,0" VerticalAlignment="Center" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}" Text="{x:Static resx:Resources.ProfilesPage_ProfilePath}" FontSize="14"/>
-                                </DockPanel>
-
-                                <DockPanel Grid.Column="1" Margin="12,0,0,0">
-                                    <TextBox Name="tB_ProfilePath" Grid.Column="1"
-                                             IsReadOnly="True" VerticalAlignment="Center"
-                                             HorizontalAlignment="Stretch" BorderThickness="1"/>
-                                </DockPanel>
-                            </Grid>
-
-                            <ui:SimpleStackPanel Spacing="18" HorizontalAlignment="Right" Orientation="Horizontal" Grid.Row="2">
-                                <ui:AppBarButton Click="b_DeleteProfile_Click" Name="b_DeleteProfile" Label="{x:Static resx:Resources.ProfilesPage_DeleteProfile}" Icon="Delete" Width="Auto" IsEnabled="False"/>
-                                <ui:AppBarButton Click="b_ApplyProfile_Click" Name="b_ApplyProfile" Label="{x:Static resx:Resources.ProfilesPage_UpdateProfile}" Icon="Save" Width="Auto" ToolTipService.ShowOnDisabled="True" ToolTipService.InitialShowDelay="100" IsEnabled="False"/>
-                            </ui:SimpleStackPanel>
+                            </Button>
                         </ui:SimpleStackPanel>
-                    </Border>
+                    </controls:Setting.ActionContent>
+                </controls:Setting>
 
-                    <!-- Enable profile -->
-                    <Border                      
-                        Padding="15,12,12,12"
-                        CornerRadius="{DynamicResource ControlCornerRadius}"
-                        Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}">
+                <!--  Warning  -->
+                <Border
+                    Name="WarningBorder"
+                    Padding="12,12,12,12"
+                    ui:ThemeManager.RequestedTheme="{Binding Source={x:Static ui:ThemeManager.Current}, Path=ActualApplicationTheme, Converter={StaticResource InverseAppThemeConverter}}"
+                    Background="{DynamicResource SystemControlHighlightAltListAccentLowBrush}"
+                    CornerRadius="{DynamicResource ControlCornerRadius}"
+                    Visibility="Collapsed">
 
+                    <Grid>
+                        <ui:SimpleStackPanel
+                            Grid.Column="0"
+                            HorizontalAlignment="Stretch"
+                            Spacing="12">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.5*" MinWidth="80" />
+                                    <ColumnDefinition Width="9.5*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Grid>
+                                    <ui:FontIcon
+                                        FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                                        Foreground="White"
+                                        Glyph="&#xF136;" />
+                                    <ui:FontIcon
+                                        FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                                        Foreground="Black"
+                                        Glyph="&#xF13C;" />
+                                </Grid>
+                                <TextBlock
+                                    Name="WarningContent"
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Center"
+                                    FontSize="14"
+                                    TextWrapping="Wrap" />
+                            </Grid>
+                        </ui:SimpleStackPanel>
+                    </Grid>
+                </Border>
+
+            </controls:SettingsGroup>
+
+            <controls:SettingsGroup
+                x:Name="GlobalDetails"
+                Header="{x:Static resx:Resources.ProfilesPage_ProfileDetails}"
+                IsEnabled="False">
+
+                <!--  Profile details  -->
+                <Border
+                    Padding="15,12,12,12"
+                    ui:ThemeManager.RequestedTheme="{Binding Source={x:Static ui:ThemeManager.Current}, Path=ActualApplicationTheme, Converter={StaticResource InverseAppThemeConverter}}"
+                    Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                    CornerRadius="{DynamicResource ControlCornerRadius}">
+
+                    <ui:SimpleStackPanel Spacing="6">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="5*" MinWidth="200"></ColumnDefinition>
-                                <ColumnDefinition Width="3*" MinWidth="120"></ColumnDefinition>
+                                <ColumnDefinition Width="3*" MinWidth="120" />
+                                <ColumnDefinition Width="5*" MinWidth="200" />
                             </Grid.ColumnDefinitions>
 
                             <DockPanel>
-                                <ui:FontIcon FontFamily="{DynamicResource SymbolThemeFontFamily}" Glyph="&#xE7EE;" Height="40" HorizontalAlignment="Center"/>
-
-                                <ui:SimpleStackPanel VerticalAlignment="Center" Margin="12,0,0,0">
-                                    <TextBlock Text="{x:Static resx:Resources.ProfilesPage_EnableProfile}" FontSize="14"/>
-                                    <TextBlock Text="{x:Static resx:Resources.ProfilesPage_EnableProfileDesc}" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" FontSize="12" TextWrapping="Wrap"/>
-                                </ui:SimpleStackPanel>
+                                <ui:FontIcon
+                                    Height="40"
+                                    FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                                    Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"
+                                    Glyph="&#xE8AC;" />
+                                <TextBlock
+                                    Margin="12,0,0,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="14"
+                                    Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"
+                                    Text="{x:Static resx:Resources.ProfilesPage_ProfileName}" />
                             </DockPanel>
 
-                            <ui:ToggleSwitch Grid.Column="1" Name="Toggle_EnableProfile" Width="40" HorizontalAlignment="Right" Toggled="Toggle_EnableProfile_Toggled"/>                           
+                            <DockPanel Grid.Column="1" Margin="12,0,0,0">
+                                <TextBox
+                                    Name="tB_ProfileName"
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Center"
+                                    Background="{DynamicResource SystemControlBackgroundBaseLowBrush}" />
+                            </DockPanel>
                         </Grid>
-                    </Border>
-                </ui:SimpleStackPanel>
 
-                <!-- Profile settings -->
-                <ui:SimpleStackPanel Spacing="6" Name="GlobalSettings" IsEnabled="False">
-                    <Label Content="{x:Static resx:Resources.ProfilesPage_ProfileSettings}" FontWeight="SemiBold"></Label>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*" MinWidth="120" />
+                                <ColumnDefinition Width="5*" MinWidth="200" />
+                            </Grid.ColumnDefinitions>
 
-                    <!-- Global settings -->
-                    <Expander Expanded="Expander_Expanded" HorizontalAlignment="Stretch">
-                        <Expander.Header>
-                            <DockPanel Margin="0,12,12,12">
-                                <ui:FontIcon FontFamily="{DynamicResource SymbolThemeFontFamily}" Glyph="&#xE713;" Height="40" HorizontalAlignment="Center"/>
-
-                                <ui:SimpleStackPanel Margin="12,0,0,0" VerticalAlignment="Center">
-                                    <TextBlock Text="{x:Static resx:Resources.ProfilesPage_GlobalSettings}" FontSize="14"/>
-                                    <TextBlock Text="{x:Static resx:Resources.ProfilesPage_GlobalSettingsDesc}" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" FontSize="12" TextWrapping="Wrap"/>
-                                </ui:SimpleStackPanel>
+                            <DockPanel>
+                                <ui:FontIcon
+                                    Height="40"
+                                    FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                                    Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"
+                                    Glyph="&#xED25;" />
+                                <TextBlock
+                                    Margin="12,0,0,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="14"
+                                    Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"
+                                    Text="{x:Static resx:Resources.ProfilesPage_ProfilePath}" />
                             </DockPanel>
-                        </Expander.Header>
 
-                        <Expander.Content>
-                            <ui:SimpleStackPanel Spacing="12" Margin="30,0,0,0">
-                                <CheckBox Name="cB_Whitelist" Content="{x:Static resx:Resources.ProfilesPage_Whitelist}" Checked="cB_Whitelist_Checked" Unchecked="cB_Whitelist_Checked"></CheckBox>
+                            <DockPanel Grid.Column="1" Margin="12,0,0,0">
+                                <TextBox
+                                    Name="tB_ProfilePath"
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Center"
+                                    BorderThickness="1"
+                                    IsReadOnly="True" />
+                            </DockPanel>
+                        </Grid>
 
-                                <!-- Separator -->
-                                <Separator BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="0 1 0 0" Margin="-60,0,-60,0" />
+                        <ui:SimpleStackPanel
+                            Grid.Row="2"
+                            HorizontalAlignment="Right"
+                            Orientation="Horizontal"
+                            Spacing="18">
+                            <ui:AppBarButton
+                                Name="b_DeleteProfile"
+                                Width="Auto"
+                                Click="b_DeleteProfile_Click"
+                                Icon="Delete"
+                                IsEnabled="False"
+                                Label="{x:Static resx:Resources.ProfilesPage_DeleteProfile}" />
+                            <ui:AppBarButton
+                                Name="b_ApplyProfile"
+                                Width="Auto"
+                                Click="b_ApplyProfile_Click"
+                                Icon="Save"
+                                IsEnabled="False"
+                                Label="{x:Static resx:Resources.ProfilesPage_UpdateProfile}"
+                                ToolTipService.InitialShowDelay="100"
+                                ToolTipService.ShowOnDisabled="True" />
+                        </ui:SimpleStackPanel>
+                    </ui:SimpleStackPanel>
+                </Border>
 
-                                <CheckBox Name="cB_Wrapper" Content="{x:Static resx:Resources.ProfilesPage_Wrapper}" Checked="cB_Wrapper_Checked" Unchecked="cB_Wrapper_Checked"></CheckBox>
+                <!--  Enable profile  -->
+                <controls:Setting
+                    Description="{x:Static resx:Resources.ProfilesPage_EnableProfileDesc}"
+                    Header="{x:Static resx:Resources.ProfilesPage_EnableProfile}"
+                    Icon="&#xE7EE;">
+                    <controls:Setting.ActionContent>
+                        <ui:ToggleSwitch
+                            Name="Toggle_EnableProfile"
+                            Style="{DynamicResource ToggleSwitchSettingStyle}"
+                            Toggled="Toggle_EnableProfile_Toggled" />
+                    </controls:Setting.ActionContent>
+                </controls:Setting>
+
+            </controls:SettingsGroup>
+
+            <!--  Profile settings  -->
+            <controls:SettingsGroup x:Name="GlobalSettings" Header="{x:Static resx:Resources.ProfilesPage_ProfileSettings}">
+
+                <!--  Global settings  -->
+                <Expander HorizontalAlignment="Stretch" Expanded="Expander_Expanded">
+                    <Expander.Header>
+                        <DockPanel Margin="0,12,12,12">
+                            <ui:FontIcon
+                                Height="40"
+                                HorizontalAlignment="Center"
+                                FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                                Glyph="&#xE713;" />
+
+                            <ui:SimpleStackPanel Margin="12,0,0,0" VerticalAlignment="Center">
+                                <TextBlock FontSize="14" Text="{x:Static resx:Resources.ProfilesPage_GlobalSettings}" />
+                                <TextBlock
+                                    FontSize="12"
+                                    Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                    Text="{x:Static resx:Resources.ProfilesPage_GlobalSettingsDesc}"
+                                    TextWrapping="Wrap" />
                             </ui:SimpleStackPanel>
-                        </Expander.Content>
-                    </Expander>
+                        </DockPanel>
+                    </Expander.Header>
 
-                    <!-- Motion control settings -->
-                    <Expander Expanded="Expander_Expanded" HorizontalAlignment="Stretch">
-                        <Expander.Header>
-                            <DockPanel Margin="0,12,12,12">
-                                <ui:FontIcon FontFamily="{DynamicResource SymbolThemeFontFamily}" Glyph="&#xE8B4;" Height="40" HorizontalAlignment="Center"/>
+                    <Expander.Content>
+                        <ui:SimpleStackPanel Margin="30,0,0,0" Spacing="12">
+                            <CheckBox
+                                Name="cB_Whitelist"
+                                Checked="cB_Whitelist_Checked"
+                                Content="{x:Static resx:Resources.ProfilesPage_Whitelist}"
+                                Unchecked="cB_Whitelist_Checked" />
 
-                                <ui:SimpleStackPanel Margin="12,0,0,0" VerticalAlignment="Center">
-                                    <TextBlock Text="{x:Static resx:Resources.ProfilesPage_MotionControlSettings}" FontSize="14"/>
-                                    <TextBlock Text="{x:Static resx:Resources.ProfilesPage_MotionControlSettingsDesc}" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" FontSize="12" TextWrapping="Wrap"/>
-                                </ui:SimpleStackPanel>
-                            </DockPanel>
-                        </Expander.Header>
+                            <!--  Separator  -->
+                            <Separator
+                                Margin="-60,0,-60,0"
+                                BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                                BorderThickness="0,1,0,0" />
 
-                        <Expander.Content>
-                            <Grid FlowDirection="LeftToRight">
-                                <ui:SimpleStackPanel Spacing="12" Margin="30,0,0,0">
+                            <CheckBox
+                                Name="cB_Wrapper"
+                                Checked="cB_Wrapper_Checked"
+                                Content="{x:Static resx:Resources.ProfilesPage_Wrapper}"
+                                Unchecked="cB_Wrapper_Checked" />
+                        </ui:SimpleStackPanel>
+                    </Expander.Content>
+                </Expander>
 
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="5*" MinWidth="200"></ColumnDefinition>
-                                            <ColumnDefinition Width="3*" MinWidth="120"></ColumnDefinition>
-                                        </Grid.ColumnDefinitions>
+                <!--  Motion control settings  -->
+                <Expander HorizontalAlignment="Stretch" Expanded="Expander_Expanded">
+                    <Expander.Header>
+                        <DockPanel Margin="0,12,12,12">
+                            <ui:FontIcon
+                                Height="40"
+                                HorizontalAlignment="Center"
+                                FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                                Glyph="&#xE8B4;" />
 
-                                        <StackPanel Orientation="Vertical">
-                                            <TextBlock Text="{x:Static resx:Resources.ProfilesPage_GyrometerMultiplier}" FontSize="14"/>
-                                            <TextBlock Text="{x:Static resx:Resources.ProfilesPage_GyrometerMultiplierDesc}" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" FontSize="12" TextWrapping="Wrap"/>
-                                        </StackPanel>
+                            <ui:SimpleStackPanel Margin="12,0,0,0" VerticalAlignment="Center">
+                                <TextBlock FontSize="14" Text="{x:Static resx:Resources.ProfilesPage_MotionControlSettings}" />
+                                <TextBlock
+                                    FontSize="12"
+                                    Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                    Text="{x:Static resx:Resources.ProfilesPage_MotionControlSettingsDesc}"
+                                    TextWrapping="Wrap" />
+                            </ui:SimpleStackPanel>
+                        </DockPanel>
+                    </Expander.Header>
 
-                                        <DockPanel Grid.Column="1" Margin="12,0,0,0">
-                                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Value, StringFormat=N1, ElementName=tb_ProfileGyroValue, Mode=OneWay}" />
-                                            <Slider Margin="6,0,0,0" Name="tb_ProfileGyroValue" VerticalAlignment="Center" AutoToolTipPlacement="TopLeft" Maximum="3" TickFrequency="0.1" Value="10" TickPlacement="BottomRight" Minimum="0.1" AutoToolTipPrecision="1" IsSnapToTickEnabled="True"
-                                                    MouseEnter="Scrolllock_MouseEnter"
-                                                    MouseLeave="Scrolllock_MouseLeave"/>
-                                        </DockPanel>
-                                    </Grid>
-
-                                    <!-- Separator -->
-                                    <Separator BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="0 1 0 0" Margin="-60,0,-60,0" />
-
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="5*" MinWidth="200"></ColumnDefinition>
-                                            <ColumnDefinition Width="3*" MinWidth="120"></ColumnDefinition>
-                                        </Grid.ColumnDefinitions>
-
-                                        <StackPanel Orientation="Vertical">
-                                            <TextBlock Text="{x:Static resx:Resources.ProfilesPage_AccelerometerMultiplier}" FontSize="14"/>
-                                            <TextBlock Text="{x:Static resx:Resources.ProfilesPage_AccelerometerMultiplierDesc}" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" FontSize="12" TextWrapping="Wrap"/>
-                                        </StackPanel>
-
-                                        <DockPanel Grid.Column="1" Margin="12,0,0,0">
-                                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Value, StringFormat=N1, ElementName=tb_ProfileAcceleroValue, Mode=OneWay}" />
-                                            <Slider Margin="6,0,0,0" Name="tb_ProfileAcceleroValue" VerticalAlignment="Center" AutoToolTipPlacement="TopLeft" LargeChange="1" Maximum="3" Minimum="0.1" TickFrequency="0.1" Value="10" TickPlacement="BottomRight" AutoToolTipPrecision="1" IsSnapToTickEnabled="True"
-                                                    MouseEnter="Scrolllock_MouseEnter"
-                                                    MouseLeave="Scrolllock_MouseLeave"/>
-                                        </DockPanel>
-                                    </Grid>
-
-                                    <!-- Separator -->
-                                    <Separator BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="0 1 0 0" Margin="-60,0,-60,0" />
-
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="5*" MinWidth="200"></ColumnDefinition>
-                                            <ColumnDefinition Width="3*" MinWidth="120"></ColumnDefinition>
-                                        </Grid.ColumnDefinitions>
-
-                                        <StackPanel Orientation="Vertical">
-                                            <TextBlock Text="{x:Static resx:Resources.ProfilesPage_GyroSteeringAxis}" FontSize="14"/>
-                                            <TextBlock Text="{x:Static resx:Resources.ProfilesPage_GyroSteeringAxisDesc}" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" FontSize="12" TextWrapping="Wrap"/>
-                                        </StackPanel>
-
-                                        <DockPanel Grid.Column="1" Margin="12,0,0,0">
-                                            <ui:RadioButtons Name="cB_GyroSteering" Grid.Column="1" HorizontalAlignment="Right" MaxColumns="2">
-                                                <ui:SimpleStackPanel Orientation="Horizontal" Spacing="6">
-                                                    <ui:FontIcon Glyph="&#xE8B4;"/>
-                                                    <Label Content="{x:Static resx:Resources.ProfilesPage_Yaw}"></Label>
-                                                </ui:SimpleStackPanel>
-                                                <ui:SimpleStackPanel Orientation="Horizontal" Spacing="6">
-                                                    <ui:FontIcon Glyph="&#xE8B4;"/>
-                                                    <Label Content="{x:Static resx:Resources.ProfilesPage_Roll}"></Label>
-                                                </ui:SimpleStackPanel>
-                                            </ui:RadioButtons>
-                                        </DockPanel>
-                                    </Grid>
-
-                                    <!-- Separator -->
-                                    <Separator BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="0 1 0 0" Margin="-60,0,-60,0" />
-
-                                    <CheckBox Name="cB_InvertHorizontal" Content="{x:Static resx:Resources.ProfilesPage_InvertHorizontalAxis}"></CheckBox>
-
-                                    <!-- Separator -->
-                                    <Separator BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="0 1 0 0" Margin="-60,0,-60,0" />
-
-                                    <CheckBox Name="cB_InvertVertical" Content="{x:Static resx:Resources.ProfilesPage_InvertVerticalAxis}"></CheckBox>
-                                </ui:SimpleStackPanel>
-                            </Grid>
-                        </Expander.Content>
-                    </Expander>
-
-                    <!-- Universal motion control settings -->
-                    <Expander Name="Expander_UMC" Expanded="Expander_Expanded" HorizontalAlignment="Stretch">
-                        <Expander.Header>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="5*" MinWidth="200"></ColumnDefinition>
-                                    <ColumnDefinition Width="3*" MinWidth="120"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-
-                                <DockPanel Margin="0,12,12,12">
-                                    <ui:FontIcon FontFamily="{DynamicResource SymbolThemeFontFamily}" Glyph="&#xe759;" Height="40" HorizontalAlignment="Center"/>
-
-                                    <ui:SimpleStackPanel Margin="12,0,0,0" VerticalAlignment="Center">
-                                        <TextBlock Text="{x:Static resx:Resources.ProfilesPage_UMCSettings}" FontSize="14"/>
-                                        <TextBlock Text="{x:Static resx:Resources.ProfilesPage_UMCSettingsDesc}" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" FontSize="12" TextWrapping="Wrap"/>
-                                    </ui:SimpleStackPanel>
-                                </DockPanel>
-                            </Grid>
-                        </Expander.Header>
-
-                        <Expander.Content>
-                            <ui:SimpleStackPanel Spacing="12" Margin="30,0,0,0">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="5*" MinWidth="200"></ColumnDefinition>
-                                        <ColumnDefinition Width="3*" MinWidth="120"></ColumnDefinition>
-                                    </Grid.ColumnDefinitions>
-
-                                    <TextBlock Text="{x:Static resx:Resources.ProfilesPage_UMCEnable}" FontSize="14" VerticalAlignment="Center"/>
-
-                                    <ui:ToggleSwitch Grid.Column="1" Width="40" HorizontalAlignment="Right" Name="Toggle_UniversalMotion" Toggled="Toggle_UniversalMotion_Toggled"/>
-                                </Grid>
-
-                                <!-- Separator -->
-                                <Separator BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="0 1 0 0" Margin="-60,0,-60,0" />
+                    <Expander.Content>
+                        <Grid FlowDirection="LeftToRight">
+                            <ui:SimpleStackPanel Margin="30,0,0,0" Spacing="12">
 
                                 <Grid>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="5*" MinWidth="200"></ColumnDefinition>
-                                        <ColumnDefinition Width="3*" MinWidth="120"></ColumnDefinition>
+                                        <ColumnDefinition Width="5*" MinWidth="200" />
+                                        <ColumnDefinition Width="3*" MinWidth="120" />
                                     </Grid.ColumnDefinitions>
 
                                     <StackPanel Orientation="Vertical">
-                                        <TextBlock Text="{x:Static resx:Resources.ProfilesPage_StyleofInput}" FontSize="14" ToolTip="{x:Static resx:Resources.ProfilesPage_StyleofInputTooltip}"/>
-                                        <TextBlock Name="Text_InputHint" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" FontSize="12" TextWrapping="Wrap"/>
-                                    </StackPanel>
-
-                                    <ui:RadioButtons Margin="6,0,0,0" Name="cB_Input" Grid.Column="1" HorizontalAlignment="Right" MaxColumns="1" VerticalAlignment="Center" SelectedIndex="0" SelectionChanged="cB_Input_SelectionChanged"/>
-                                </Grid>
-
-                                <!-- Separator -->
-                                <Separator BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="0 1 0 0" Margin="-60,0,-60,0" />
-
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="5*" MinWidth="200"></ColumnDefinition>
-                                        <ColumnDefinition Width="3*" MinWidth="120"></ColumnDefinition>
-                                    </Grid.ColumnDefinitions>
-
-                                    <StackPanel Orientation="Vertical">
-                                        <TextBlock Text="{x:Static resx:Resources.ProfilesPage_StyleofOutput}" ToolTip="{x:Static resx:Resources.ProfilesPage_StyleofOutputTooltip}" FontSize="14"/>
-                                        <TextBlock Text="{x:Static resx:Resources.ProfilesPage_UMCSelectionRightLeftDesc}" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" FontSize="12" TextWrapping="Wrap"/>
-                                    </StackPanel>
-
-                                    <ui:RadioButtons Margin="6,0,0,0" Name="cB_Output" Grid.Column="1" HorizontalAlignment="Right" MaxColumns="2" VerticalAlignment="Center" SelectedIndex="0"/>
-                                </Grid>
-
-                                <!-- Separator -->
-                                <Separator BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="0 1 0 0" Margin="-60,0,-60,0" />
-
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="5*" MinWidth="200"></ColumnDefinition>
-                                        <ColumnDefinition Width="3*" MinWidth="120"></ColumnDefinition>
-                                    </Grid.ColumnDefinitions>
-
-                                    <StackPanel Orientation="Vertical">
-                                        <TextBlock Text="{x:Static resx:Resources.ProfilesPage_AntiDeadzone}" FontSize="14"/>
-                                        <TextBlock Text="{x:Static resx:Resources.ProfilesPage_AntiDeadzoneDesc}" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" FontSize="12" TextWrapping="Wrap"/>
+                                        <TextBlock FontSize="14" Text="{x:Static resx:Resources.ProfilesPage_GyrometerMultiplier}" />
+                                        <TextBlock
+                                            FontSize="12"
+                                            Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                            Text="{x:Static resx:Resources.ProfilesPage_GyrometerMultiplierDesc}"
+                                            TextWrapping="Wrap" />
                                     </StackPanel>
 
                                     <DockPanel Grid.Column="1" Margin="12,0,0,0">
-                                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Value, ElementName=tb_ProfileAntiDeadzone, Mode=OneWay}" />
-                                        <Slider Margin="6,0,0,0" Name="tb_ProfileAntiDeadzone" VerticalAlignment="Center" AutoToolTipPlacement="TopLeft" LargeChange="10" Maximum="100" TickPlacement="BottomRight" SmallChange="5" TickFrequency="5" IsSnapToTickEnabled="true"
-                                                MouseEnter="Scrolllock_MouseEnter"
-                                                MouseLeave="Scrolllock_MouseLeave"/>
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Text="{Binding Value, StringFormat=N1, ElementName=tb_ProfileGyroValue, Mode=OneWay}" />
+                                        <Slider
+                                            Name="tb_ProfileGyroValue"
+                                            Margin="6,0,0,0"
+                                            VerticalAlignment="Center"
+                                            AutoToolTipPlacement="TopLeft"
+                                            AutoToolTipPrecision="1"
+                                            IsSnapToTickEnabled="True"
+                                            Maximum="3"
+                                            Minimum="0.1"
+                                            MouseEnter="Scrolllock_MouseEnter"
+                                            MouseLeave="Scrolllock_MouseLeave"
+                                            TickFrequency="0.1"
+                                            TickPlacement="BottomRight"
+                                            Value="10" />
                                     </DockPanel>
                                 </Grid>
 
-                                <!-- Separator -->
-                                <Separator BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="0 1 0 0" Margin="-60,0,-60,0" />
+                                <!--  Separator  -->
+                                <Separator
+                                    Margin="-60,0,-60,0"
+                                    BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                                    BorderThickness="0,1,0,0" />
 
                                 <Grid>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="5*" MinWidth="200"></ColumnDefinition>
-                                        <ColumnDefinition Width="3*" MinWidth="120"></ColumnDefinition>
+                                        <ColumnDefinition Width="5*" MinWidth="200" />
+                                        <ColumnDefinition Width="3*" MinWidth="120" />
                                     </Grid.ColumnDefinitions>
 
                                     <StackPanel Orientation="Vertical">
-                                        <TextBlock Text="{x:Static resx:Resources.ProfilesPage_EnableButton}" FontSize="14"/>
-                                        <TextBlock Text="{x:Static resx:Resources.ProfilesPage_EnableButtonDesc}" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}" FontSize="12" TextWrapping="Wrap"/>
+                                        <TextBlock FontSize="14" Text="{x:Static resx:Resources.ProfilesPage_AccelerometerMultiplier}" />
+                                        <TextBlock
+                                            FontSize="12"
+                                            Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                            Text="{x:Static resx:Resources.ProfilesPage_AccelerometerMultiplierDesc}"
+                                            TextWrapping="Wrap" />
                                     </StackPanel>
+
+                                    <DockPanel Grid.Column="1" Margin="12,0,0,0">
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Text="{Binding Value, StringFormat=N1, ElementName=tb_ProfileAcceleroValue, Mode=OneWay}" />
+                                        <Slider
+                                            Name="tb_ProfileAcceleroValue"
+                                            Margin="6,0,0,0"
+                                            VerticalAlignment="Center"
+                                            AutoToolTipPlacement="TopLeft"
+                                            AutoToolTipPrecision="1"
+                                            IsSnapToTickEnabled="True"
+                                            LargeChange="1"
+                                            Maximum="3"
+                                            Minimum="0.1"
+                                            MouseEnter="Scrolllock_MouseEnter"
+                                            MouseLeave="Scrolllock_MouseLeave"
+                                            TickFrequency="0.1"
+                                            TickPlacement="BottomRight"
+                                            Value="10" />
+                                    </DockPanel>
                                 </Grid>
 
-                                <ui:LayoutPanel Name="cB_Buttons" HorizontalAlignment="Center">
-                                    <ui:LayoutPanel.Layout>
-                                        <ui:UniformGridLayout/>
-                                    </ui:LayoutPanel.Layout>
-                                </ui:LayoutPanel>
-
-                                <!-- Separator -->
-                                <Separator BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumBrush}" BorderThickness="0 1 0 0" Margin="-60,0,-60,0" />
+                                <!--  Separator  -->
+                                <Separator
+                                    Margin="-60,0,-60,0"
+                                    BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                                    BorderThickness="0,1,0,0" />
 
                                 <Grid>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="6*" MinWidth="200"></ColumnDefinition>
-                                        <ColumnDefinition Width="0.5*" ></ColumnDefinition>
-                                        <ColumnDefinition Width="4*" MinWidth="120"></ColumnDefinition>
+                                        <ColumnDefinition Width="5*" MinWidth="200" />
+                                        <ColumnDefinition Width="3*" MinWidth="120" />
                                     </Grid.ColumnDefinitions>
 
-                                    <Button Click="b_AdditionalSettings_Click" Grid.Column="2" HorizontalAlignment="Stretch" Content="{x:Static resx:Resources.ProfilesPage_AdditionalSettings}" />
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock FontSize="14" Text="{x:Static resx:Resources.ProfilesPage_GyroSteeringAxis}" />
+                                        <TextBlock
+                                            FontSize="12"
+                                            Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                            Text="{x:Static resx:Resources.ProfilesPage_GyroSteeringAxisDesc}"
+                                            TextWrapping="Wrap" />
+                                    </StackPanel>
+
+                                    <DockPanel Grid.Column="1" Margin="12,0,0,0">
+                                        <ui:RadioButtons
+                                            Name="cB_GyroSteering"
+                                            Grid.Column="1"
+                                            HorizontalAlignment="Right"
+                                            MaxColumns="2">
+                                            <ui:SimpleStackPanel Orientation="Horizontal" Spacing="6">
+                                                <ui:FontIcon Glyph="&#xE8B4;" />
+                                                <Label Content="{x:Static resx:Resources.ProfilesPage_Yaw}" />
+                                            </ui:SimpleStackPanel>
+                                            <ui:SimpleStackPanel Orientation="Horizontal" Spacing="6">
+                                                <ui:FontIcon Glyph="&#xE8B4;" />
+                                                <Label Content="{x:Static resx:Resources.ProfilesPage_Roll}" />
+                                            </ui:SimpleStackPanel>
+                                        </ui:RadioButtons>
+                                    </DockPanel>
                                 </Grid>
+
+                                <!--  Separator  -->
+                                <Separator
+                                    Margin="-60,0,-60,0"
+                                    BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                                    BorderThickness="0,1,0,0" />
+
+                                <CheckBox Name="cB_InvertHorizontal" Content="{x:Static resx:Resources.ProfilesPage_InvertHorizontalAxis}" />
+
+                                <!--  Separator  -->
+                                <Separator
+                                    Margin="-60,0,-60,0"
+                                    BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                                    BorderThickness="0,1,0,0" />
+
+                                <CheckBox Name="cB_InvertVertical" Content="{x:Static resx:Resources.ProfilesPage_InvertVerticalAxis}" />
                             </ui:SimpleStackPanel>
-                        </Expander.Content>
-                    </Expander>
-                </ui:SimpleStackPanel>
-            </ui:SimpleStackPanel>
-        </Border>
+                        </Grid>
+                    </Expander.Content>
+                </Expander>
+
+                <!--  Universal motion control settings  -->
+                <Expander
+                    Name="Expander_UMC"
+                    HorizontalAlignment="Stretch"
+                    Expanded="Expander_Expanded">
+                    <Expander.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="5*" MinWidth="200" />
+                                <ColumnDefinition Width="3*" MinWidth="120" />
+                            </Grid.ColumnDefinitions>
+
+                            <DockPanel Margin="0,12,12,12">
+                                <ui:FontIcon
+                                    Height="40"
+                                    HorizontalAlignment="Center"
+                                    FontFamily="{DynamicResource SymbolThemeFontFamily}"
+                                    Glyph="&#xe759;" />
+
+                                <ui:SimpleStackPanel Margin="12,0,0,0" VerticalAlignment="Center">
+                                    <TextBlock FontSize="14" Text="{x:Static resx:Resources.ProfilesPage_UMCSettings}" />
+                                    <TextBlock
+                                        FontSize="12"
+                                        Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                        Text="{x:Static resx:Resources.ProfilesPage_UMCSettingsDesc}"
+                                        TextWrapping="Wrap" />
+                                </ui:SimpleStackPanel>
+                            </DockPanel>
+                        </Grid>
+                    </Expander.Header>
+
+                    <Expander.Content>
+                        <ui:SimpleStackPanel Margin="30,0,0,0" Spacing="12">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="5*" MinWidth="200" />
+                                    <ColumnDefinition Width="3*" MinWidth="120" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    FontSize="14"
+                                    Text="{x:Static resx:Resources.ProfilesPage_UMCEnable}" />
+
+                                <ui:ToggleSwitch
+                                    Name="Toggle_UniversalMotion"
+                                    Grid.Column="1"
+                                    Width="40"
+                                    HorizontalAlignment="Right"
+                                    Toggled="Toggle_UniversalMotion_Toggled" />
+                            </Grid>
+
+                            <!--  Separator  -->
+                            <Separator
+                                Margin="-60,0,-60,0"
+                                BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                                BorderThickness="0,1,0,0" />
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="5*" MinWidth="200" />
+                                    <ColumnDefinition Width="3*" MinWidth="120" />
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock
+                                        FontSize="14"
+                                        Text="{x:Static resx:Resources.ProfilesPage_StyleofInput}"
+                                        ToolTip="{x:Static resx:Resources.ProfilesPage_StyleofInputTooltip}" />
+                                    <TextBlock
+                                        Name="Text_InputHint"
+                                        FontSize="12"
+                                        Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                        TextWrapping="Wrap" />
+                                </StackPanel>
+
+                                <ui:RadioButtons
+                                    Name="cB_Input"
+                                    Grid.Column="1"
+                                    Margin="6,0,0,0"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"
+                                    MaxColumns="1"
+                                    SelectedIndex="0"
+                                    SelectionChanged="cB_Input_SelectionChanged" />
+                            </Grid>
+
+                            <!--  Separator  -->
+                            <Separator
+                                Margin="-60,0,-60,0"
+                                BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                                BorderThickness="0,1,0,0" />
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="5*" MinWidth="200" />
+                                    <ColumnDefinition Width="3*" MinWidth="120" />
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock
+                                        FontSize="14"
+                                        Text="{x:Static resx:Resources.ProfilesPage_StyleofOutput}"
+                                        ToolTip="{x:Static resx:Resources.ProfilesPage_StyleofOutputTooltip}" />
+                                    <TextBlock
+                                        FontSize="12"
+                                        Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                        Text="{x:Static resx:Resources.ProfilesPage_UMCSelectionRightLeftDesc}"
+                                        TextWrapping="Wrap" />
+                                </StackPanel>
+
+                                <ui:RadioButtons
+                                    Name="cB_Output"
+                                    Grid.Column="1"
+                                    Margin="6,0,0,0"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"
+                                    MaxColumns="2"
+                                    SelectedIndex="0" />
+                            </Grid>
+
+                            <!--  Separator  -->
+                            <Separator
+                                Margin="-60,0,-60,0"
+                                BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                                BorderThickness="0,1,0,0" />
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="5*" MinWidth="200" />
+                                    <ColumnDefinition Width="3*" MinWidth="120" />
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock FontSize="14" Text="{x:Static resx:Resources.ProfilesPage_AntiDeadzone}" />
+                                    <TextBlock
+                                        FontSize="12"
+                                        Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                        Text="{x:Static resx:Resources.ProfilesPage_AntiDeadzoneDesc}"
+                                        TextWrapping="Wrap" />
+                                </StackPanel>
+
+                                <DockPanel Grid.Column="1" Margin="12,0,0,0">
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Text="{Binding Value, ElementName=tb_ProfileAntiDeadzone, Mode=OneWay}" />
+                                    <Slider
+                                        Name="tb_ProfileAntiDeadzone"
+                                        Margin="6,0,0,0"
+                                        VerticalAlignment="Center"
+                                        AutoToolTipPlacement="TopLeft"
+                                        IsSnapToTickEnabled="true"
+                                        LargeChange="10"
+                                        Maximum="100"
+                                        MouseEnter="Scrolllock_MouseEnter"
+                                        MouseLeave="Scrolllock_MouseLeave"
+                                        SmallChange="5"
+                                        TickFrequency="5"
+                                        TickPlacement="BottomRight" />
+                                </DockPanel>
+                            </Grid>
+
+                            <!--  Separator  -->
+                            <Separator
+                                Margin="-60,0,-60,0"
+                                BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                                BorderThickness="0,1,0,0" />
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="5*" MinWidth="200" />
+                                    <ColumnDefinition Width="3*" MinWidth="120" />
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock FontSize="14" Text="{x:Static resx:Resources.ProfilesPage_EnableButton}" />
+                                    <TextBlock
+                                        FontSize="12"
+                                        Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                                        Text="{x:Static resx:Resources.ProfilesPage_EnableButtonDesc}"
+                                        TextWrapping="Wrap" />
+                                </StackPanel>
+                            </Grid>
+
+                            <ui:LayoutPanel Name="cB_Buttons" HorizontalAlignment="Center">
+                                <ui:LayoutPanel.Layout>
+                                    <ui:UniformGridLayout />
+                                </ui:LayoutPanel.Layout>
+                            </ui:LayoutPanel>
+
+                            <!--  Separator  -->
+                            <Separator
+                                Margin="-60,0,-60,0"
+                                BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                                BorderThickness="0,1,0,0" />
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="6*" MinWidth="200" />
+                                    <ColumnDefinition Width="0.5*" />
+                                    <ColumnDefinition Width="4*" MinWidth="120" />
+                                </Grid.ColumnDefinitions>
+
+                                <Button
+                                    Grid.Column="2"
+                                    HorizontalAlignment="Stretch"
+                                    Click="b_AdditionalSettings_Click"
+                                    Content="{x:Static resx:Resources.ProfilesPage_AdditionalSettings}" />
+                            </Grid>
+                        </ui:SimpleStackPanel>
+                    </Expander.Content>
+                </Expander>
+
+            </controls:SettingsGroup>
+        </ui:SimpleStackPanel>
     </Grid>
 </Page>

@@ -1,0 +1,13 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:s="clr-namespace:System;assembly=mscorlib">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://Application:,,,/HandheldCompanion;component/Styles/Button.xaml" />
+        <ResourceDictionary Source="pack://Application:,,,/HandheldCompanion;component/Styles/Common.xaml" />
+        <ResourceDictionary Source="pack://Application:,,,/HandheldCompanion;component/Styles/TextBlock.xaml" />
+        <ResourceDictionary Source="pack://Application:,,,/HandheldCompanion;component/Styles/SettingButton.xaml" />
+        <ResourceDictionary Source="pack://Application:,,,/HandheldCompanion;component/Styles/SettingExpander.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+    <s:Double x:Key="SettingActionControlMinWidth">240</s:Double>
+</ResourceDictionary>
